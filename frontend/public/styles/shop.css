@@ -380,23 +380,33 @@ body {
     /* Ensure image and content stay within borders */
 }
 
-.collection-item:nth-child(even) {
+/* Zigzag Layout: Start with Text Left (Odd), then Image Left (Even) */
+.collection-item:nth-child(odd) {
     grid-template-columns: 1fr 1.4fr;
 }
 
-.collection-item:nth-child(even) .item-image {
+.collection-item:nth-child(odd) .item-image {
     order: 2;
 }
 
-.collection-item:nth-child(even) .item-content {
+.collection-item:nth-child(odd) .item-content {
     order: 1;
     padding-left: 4rem;
     padding-right: 2rem;
 }
 
-.collection-item:nth-child(odd) .item-content {
+.collection-item:nth-child(even) {
+    grid-template-columns: 1.4fr 1fr;
+}
+
+.collection-item:nth-child(even) .item-content {
+    order: 2;
     padding-right: 4rem;
     padding-left: 2rem;
+}
+
+.collection-item:nth-child(even) .item-image {
+    order: 1;
 }
 
 .collection-item:hover {
