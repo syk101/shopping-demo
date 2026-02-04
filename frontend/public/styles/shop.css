@@ -95,7 +95,10 @@
     --border-radius: 0.75rem;
     --border-radius-lg: 1.5rem;
     --transition: all 0.3s ease;
-    --container-width: 100%;
+    --container-width: 1200px;
+    /* Restore original width for content */
+    --nav-width: 100%;
+    /* New variable for full-width nav */
     --font-size-sm: 0.875rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.125rem;
@@ -127,7 +130,7 @@ body {
 }
 
 .nav-container {
-    max-width: var(--container-width);
+    max-width: var(--nav-width);
     margin: 0 auto;
     padding: 0 3rem;
     display: flex;
