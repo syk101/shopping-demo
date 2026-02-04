@@ -836,6 +836,22 @@ body {
         text-align: center;
     }
 
+    /* Force consistent stacking order (Image Top, Text Bottom) for mobile/tablet */
+    .collection-item .item-image,
+    .collection-item:nth-child(even) .item-image,
+    .collection-item:nth-child(odd) .item-image {
+        order: 1;
+    }
+
+    .collection-item .item-content,
+    .collection-item:nth-child(even) .item-content,
+    .collection-item:nth-child(odd) .item-content {
+        order: 2;
+        padding-left: 2rem;
+        /* Reset padding from desktop shifts */
+        padding-right: 2rem;
+    }
+
     .contact-content {
         grid-template-columns: 1fr;
     }
