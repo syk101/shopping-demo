@@ -48,6 +48,30 @@ function handleDemoLogin() {
 }
 
 /**
+ * Handles the Facebook Login
+ */
+function handleFacebookLogin() {
+    // In a real app, this would use FB.login()
+    // For this demo/GitHub Pages, we emulate a successful login
+    const facebookUser = {
+        id: "fb-user-456",
+        name: "Facebook User",
+        email: "fbuser@example.com",
+        picture: "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158496459063227&height=200&width=200&ext=1690626302&hash=AeQ3sQd5a3J5bQ6a" // Placeholder FB mockup image
+    };
+
+    // Fallback image if the specific FB URL expires or breaks
+    const fallbackImage = "https://ui-avatars.com/api/?name=Facebook+User&background=1877F2&color=fff";
+
+    // Check if image loads (optional refinement), but for now simply:
+    facebookUser.picture = fallbackImage;
+
+    console.log("Logging in with Facebook (Demo Mode)...");
+    localStorage.setItem('shopUser', JSON.stringify(facebookUser));
+    window.location.href = 'shop.html';
+}
+
+/**
  * Decodes the JWT token returned by Google
  * @param {string} token - The JWT token
  * @returns {Object} - The decoded payload
