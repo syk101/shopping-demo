@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Collections | ShopManager Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/collections.css">
+</head>
+<body>
+    <!-- Video Background Overlay -->
+    <div class="video-overlay">
+        <video autoplay muted loop id="collection-video">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-woman-talking-on-the-phone-in-a-fashion-shop-46515-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="overlay-gradient"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <span>LUXE COLLECTIONS</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#mens" class="nav-link">Men's</a>
+                <a href="#womens" class="nav-link">Women's</a>
+                <a href="#kids" class="nav-link">Kids</a>
+                <a href="/" class="nav-link cta">Back to Dashboard</a>
+            </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>DISCOVER OUR PREMIUM COLLECTIONS</h1>
+            <p>Experience luxury fashion designed for every lifestyle</p>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Showcase -->
+    <section class="collections-showcase">
+        <!-- Men's Collection -->
+        <div class="collection-section" id="mens">
+            <div class="collection-container">
+                <div class="collection-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-male"></i>
+                        <h3>MEN'S COLLECTION</h3>
+                    </div>
+                </div>
+                <div class="collection-content">
+                    <h2>MODERN GENTLEMAN</h2>
+                    <p>Elevate your wardrobe with our premium collection crafted for the modern man. From casual wear to formal attire, discover pieces that define sophistication.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <span>Premium Fabrics</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <span>Tailored Fit</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <span>Timeless Design</span>
+                        </div>
+                    </div>
+                    <button class="cta-button" onclick="viewCollection('mens')">
+                        EXPLORE COLLECTION
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Women's Collection -->
+        <div class="collection-section" id="womens">
+            <div class="collection-container">
+                <div class="collection-content">
+                    <h2>ELEGANT WOMAN</h2>
+                    <p>Embrace your femininity with our exquisite collection designed for the contemporary woman. From elegant evening wear to chic everyday outfits.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <span>Luxurious Materials</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <span>Flattering Cuts</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <span>Versatile Pieces</span>
+                        </div>
+                    </div>
+                    <button class="cta-button" onclick="viewCollection('womens')">
+                        EXPLORE COLLECTION
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="collection-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-female"></i>
+                        <h3>WOMEN'S COLLECTION</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kids Collection -->
+        <div class="collection-section" id="kids">
+            <div class="collection-container">
+                <div class="collection-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-child"></i>
+                        <h3>KIDS COLLECTION</h3>
+                    </div>
+                </div>
+                <div class="collection-content">
+                    <h2>PLAYFUL CHARM</h2>
+                    <p>Adorable and comfortable clothing for your little ones. Designed with love, durability, and style in mind for active children.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-baby"></i>
+                            <span>Soft Fabrics</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-baby"></i>
+                            <span>Colorful Designs</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-baby"></i>
+                            <span>Durable Quality</span>
+                        </div>
+                    </div>
+                    <button class="cta-button" onclick="viewCollection('kids')">
+                        EXPLORE COLLECTION
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Preview -->
+    <section class="featured-preview">
+        <h2>FEATURED ITEMS</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="placeholder-image"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Premium Suit</h3>
+                    <p class="price">$299.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="placeholder-image"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Elegant Dress</h3>
+                    <p class="price">$199.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="placeholder-image"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Kids Outfit Set</h3>
+                    <p class="price">$59.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>LUXE COLLECTIONS</h3>
+                <p>Premium fashion for the modern family</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#mens">Men's Collection</a></li>
+                    <li><a href="#womens">Women's Collection</a></li>
+                    <li><a href="#kids">Kids Collection</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                <p><i class="fas fa-envelope"></i> info@luxecollections.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Luxe Collections. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/collections.js"></script>
+</body>
+</html>

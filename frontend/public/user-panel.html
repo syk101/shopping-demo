@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Collections | ShopManager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/user-panel.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="user-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-store"></i>
+                <h1>COLLECTIONS</h1>
+            </div>
+            <nav class="user-nav">
+                <a href="#mens" class="nav-item">MEN'S</a>
+                <a href="#womens" class="nav-item">WOMEN'S</a>
+                <a href="#kids" class="nav-item">KIDS</a>
+                <a href="index.html" class="nav-item back-btn">BACK TO ADMIN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>DISCOVER OUR COLLECTIONS</h1>
+            <p>Explore our premium selections for every style and occasion</p>
+        </div>
+    </section>
+
+    <!-- Men's Collection Section -->
+    <section class="collection-section mens-section" id="mens">
+        <div class="section-header">
+            <h2>MEN'S COLLECTION</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="collection-content">
+            <div class="collection-image">
+                <div class="image-placeholder mens-bg">
+                    <i class="fas fa-male"></i>
+                </div>
+            </div>
+            <div class="collection-details">
+                <h3>PREMIUM MENSWEAR</h3>
+                <p>Discover sophisticated styles crafted for the modern gentleman. From business attire to casual wear, our collection combines quality materials with contemporary design.</p>
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Premium Quality Fabrics</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Perfect Fit & Tailoring</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Timeless Design</span>
+                    </div>
+                </div>
+                <button class="explore-btn" onclick="exploreCollection('mens')">
+                    EXPLORE MEN'S COLLECTION
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Women's Collection Section -->
+    <section class="collection-section womens-section" id="womens">
+        <div class="section-header">
+            <h2>WOMEN'S COLLECTION</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="collection-content">
+            <div class="collection-details">
+                <h3>ELEGANT WOMENSWEAR</h3>
+                <p>Embrace your unique style with our carefully curated women's collection. From elegant dresses to versatile separates, each piece is designed to enhance your natural beauty.</p>
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Luxurious Materials</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Flattering Silhouettes</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Versatile Styling</span>
+                    </div>
+                </div>
+                <button class="explore-btn" onclick="exploreCollection('womens')">
+                    EXPLORE WOMEN'S COLLECTION
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="collection-image">
+                <div class="image-placeholder womens-bg">
+                    <i class="fas fa-female"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kids Collection Section -->
+    <section class="collection-section kids-section" id="kids">
+        <div class="section-header">
+            <h2>KIDS COLLECTION</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="collection-content">
+            <div class="collection-image">
+                <div class="image-placeholder kids-bg">
+                    <i class="fas fa-child"></i>
+                </div>
+            </div>
+            <div class="collection-details">
+                <h3>PLAYFUL KIDSWEAR</h3>
+                <p>Colorful, comfortable, and durable clothing designed for active children. Our kids collection combines fun designs with practical functionality for everyday adventures.</p>
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Soft & Comfortable</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Easy to Care For</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Durable Construction</span>
+                    </div>
+                </div>
+                <button class="explore-btn" onclick="exploreCollection('kids')">
+                    EXPLORE KIDS COLLECTION
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+        <div class="section-header">
+            <h2>FEATURED PRODUCTS</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="placeholder-img"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Premium Suit</h3>
+                    <p class="price">$299.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="placeholder-img"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Elegant Dress</h3>
+                    <p class="price">$199.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="placeholder-img"></div>
+                </div>
+                <div class="product-info">
+                    <h3>Kids Outfit Set</h3>
+                    <p class="price">$59.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="user-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>SHOPMANAGER COLLECTIONS</h3>
+                <p>Premium fashion for every lifestyle</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#mens">Men's Collection</a></li>
+                    <li><a href="#womens">Women's Collection</a></li>
+                    <li><a href="#kids">Kids Collection</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                <p><i class="fas fa-envelope"></i> support@shopmanager.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ShopManager. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/user-panel.js"></script>
+</body>
+</html>

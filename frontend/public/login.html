@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Premium Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/shop.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header i {
+            font-size: 3rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .divider {
+            height: 1px;
+            background: #ddd;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .divider span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 10px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .google-btn-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 1.5rem;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #1a1a1a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fas fa-store"></i>
+                <h1>WELCOME BACK</h1>
+                <p>Sign in to access your premium account</p>
+            </div>
+
+            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-context="signin" data-ux_mode="popup"
+                data-callback="handleCredentialResponse" data-auto_prompt="false">
+            </div>
+
+            <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+                data-text="signin_with" data-size="large" data-logo_alignment="left">
+            </div>
+
+            <!-- Demo Login Button for development/testing -->
+            <button onclick="handleDemoLogin()" class="demo-login-btn" style="
+                margin-top: 1rem;
+                width: 100%;
+                padding: 10px;
+                border: 1px dashed #666;
+                background: #f8f9fa;
+                border-radius: 4px;
+                cursor: pointer;
+                color: #555;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            ">
+                <i class="fas fa-user-secret"></i> Test with Demo Account
+            </button>
+
+            <a href="shop.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Shop
+            </a>
+        </div>
+    </div>
+
+    <!-- Google Identity Services Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Auth Script -->
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

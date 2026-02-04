@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Collections | Premium Fashion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/shop.css">
+</head>
+
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-store"></i>
+                <span>PREMIUM SHOP</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#mens" class="nav-link">Men's</a>
+                <a href="#womens" class="nav-link">Women's</a>
+                <a href="#kids" class="nav-link">Kids</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Video Background Overlay -->
+    <div class="video-overlay">
+        <video autoplay muted loop id="hero-video">
+            <source src="first%20video.mp4" type="video/mp4">
+            <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-woman-walking-in-a-fashion-store-46516-large.mp4"
+                type="video/mp4">
+            <source
+                src="https://assets.mixkit.co/videos/preview/mixkit-people-walking-in-a-fashion-mall-46523-large.mp4"
+                type="video/mp4">
+            <!-- Fallback content -->
+        </video>
+        <div class="video-overlay-gradient"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>DISCOVER OUR PREMIUM COLLECTIONS</h1>
+            <p>Experience luxury fashion crafted for every lifestyle and occasion</p>
+            <div class="cta-buttons">
+                <a href="#mens" class="btn btn-primary">EXPLORE MEN'S</a>
+                <a href="#womens" class="btn btn-secondary">EXPLORE WOMEN'S</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Men's Collection -->
+    <section class="collection-section mens-collection" id="mens">
+        <div class="container">
+            <div class="section-header">
+                <h2>MEN'S COLLECTION</h2>
+                <div class="divider"></div>
+                <p>Sophisticated styles for the modern gentleman</p>
+            </div>
+            <div class="collection-grid">
+                <div class="collection-item">
+                    <div class="item-image mens-bg">
+                        <div class="video-container">
+                            <video autoplay muted loop class="collection-video" id="mens-video">
+                                <source src="mens%20collection.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                    <div class="item-content">
+                        <h3>PREMIUM SUITS</h3>
+                        <p>Handcrafted suits with perfect tailoring and premium fabrics for the distinguished gentleman.
+                        </p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Italian Wool Blends</li>
+                            <li><i class="fas fa-check"></i> Custom Tailoring</li>
+                            <li><i class="fas fa-check"></i> Timeless Design</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="viewProducts('mens', 'suits')">
+                            VIEW SUITS
+                        </button>
+                    </div>
+                </div>
+                <div class="collection-item">
+                    <div class="item-image casual-bg">
+                        <video autoplay muted loop class="collection-video">
+                            <source src="casual-waer.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item-content">
+                        <h3>CASUAL WEAR</h3>
+                        <p>Comfortable yet stylish casual collection for everyday sophistication and weekend relaxation.
+                        </p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Premium Cotton</li>
+                            <li><i class="fas fa-check"></i> Modern Cuts</li>
+                            <li><i class="fas fa-check"></i> Versatile Styles</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="viewProducts('mens', 'casual')">
+                            VIEW CASUAL
+                        </button>
+                    </div>
+                </div>
+                <div class="products-grid" id="mens-products"></div>
+            </div>
+    </section>
+
+    <!-- Women's Collection -->
+    <section class="collection-section womens-collection" id="womens">
+        <div class="container">
+            <div class="section-header">
+                <h2>WOMEN'S COLLECTION</h2>
+                <div class="divider"></div>
+                <p>Elegant designs that celebrate feminine beauty and confidence</p>
+            </div>
+            <div class="collection-grid">
+                <div class="collection-item">
+                    <div class="item-image evening-bg">
+                        <video autoplay muted loop class="collection-video">
+                            <source src="evening%20wear.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item-content">
+                        <h3>EVENING WEAR</h3>
+                        <p>Stunning evening dresses and gowns for special occasions and memorable moments.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Luxurious Fabrics</li>
+                            <li><i class="fas fa-check"></i> Elegant Silhouettes</li>
+                            <li><i class="fas fa-check"></i> Handcrafted Details</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="viewProducts('womens', 'evening')">
+                            VIEW EVENING
+                        </button>
+                    </div>
+                </div>
+                <div class="collection-item">
+                    <div class="item-image everyday-bg">
+                        <video autoplay muted loop class="collection-video">
+                            <source src="everyday%20essentials.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item-content">
+                        <h3>EVERYDAY ESSENTIALS</h3>
+                        <p>Perfect pieces for daily wear that combine comfort, style, and versatility.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Quality Materials</li>
+                            <li><i class="fas fa-check"></i> Flattering Fits</li>
+                            <li><i class="fas fa-check"></i> Easy Care</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="viewProducts('womens', 'everyday')">
+                            VIEW EVERYDAY
+                        </button>
+                    </div>
+                </div>
+                <div class="products-grid" id="womens-products"></div>
+            </div>
+    </section>
+
+    <!-- Kids Collection -->
+    <section class="collection-section kids-collection" id="kids">
+        <div class="container">
+            <div class="section-header">
+                <h2>KIDS COLLECTION</h2>
+                <div class="divider"></div>
+                <p>Fun, comfortable, and durable clothing for active children</p>
+            </div>
+            <div class="collection-grid">
+                <div class="collection-item">
+                    <div class="item-image kids-bg">
+                        <video autoplay muted loop class="collection-video">
+                            <source src="playtime%20outfits.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item-content">
+                        <h3>PLAYTIME OUTFITS</h3>
+                        <p>Colorful and comfortable outfits designed for active play and daily adventures.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Soft Cotton</li>
+                            <li><i class="fas fa-check"></i> Easy Movement</li>
+                            <li><i class="fas fa-check"></i> Fun Designs</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="viewProducts('kids', 'playtime')">
+                            VIEW PLAYTIME
+                        </button>
+                    </div>
+                </div>
+                <div class="collection-item">
+                    <div class="item-image school-bg">
+                        <video autoplay muted loop class="collection-video">
+                            <source src="school%20uniform.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item-content">
+                        <h3>SCHOOL UNIFORMS</h3>
+                        <p>Smart and durable school wear that helps children look their best every day.</p>
+                        <ul class="features">
+                            <li><i class="fas fa-check"></i> Durable Fabric</li>
+                            <li><i class="fas fa-check"></i> Professional Look</li>
+                            <li><i class="fas fa-check"></i> Easy Maintenance</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="viewProducts('kids', 'school')">
+                            VIEW SCHOOL
+                        </button>
+                    </div>
+                </div>
+                <div class="products-grid" id="kids-products"></div>
+            </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+        <div class="container">
+            <div class="section-header">
+                <h2>FEATURED PRODUCTS</h2>
+                <div class="divider"></div>
+                <p>Our most popular items loved by customers</p>
+            </div>
+            <div class="products-grid" id="featured-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <div class="image-placeholder"></div>
+                        <div class="product-badge">NEW</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Premium Wool Suit</h3>
+                        <p class="product-description">Handcrafted Italian wool suit with perfect fit</p>
+                        <div class="product-price">$499.99</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(128)</span>
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="addToCart(1)">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <div class="image-placeholder"></div>
+                        <div class="product-badge sale">SALE</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Elegant Evening Gown</h3>
+                        <p class="product-description">Stunning silk evening dress for special occasions</p>
+                        <div class="product-price">
+                            <span class="original-price">$299.99</span>
+                            <span class="sale-price">$199.99</span>
+                        </div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(89)</span>
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="addToCart(2)">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image">
+                        <div class="image-placeholder"></div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Kids Play Set</h3>
+                        <p class="product-description">Comfortable cotton play outfit for active kids</p>
+                        <div class="product-price">$39.99</div>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(64)</span>
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="addToCart(3)">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>GET IN TOUCH</h2>
+                <div class="divider"></div>
+                <p>We'd love to hear from you</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Our Location</h4>
+                            <p>123 Fashion Street, New York, NY 10001</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>info@premiumshop.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">SEND MESSAGE</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>PREMIUM SHOP</h3>
+                    <p>Quality fashion for every lifestyle</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>SHOP</h4>
+                    <ul>
+                        <li><a href="#mens">Men's Collection</a></li>
+                        <li><a href="#womens">Women's Collection</a></li>
+                        <li><a href="#kids">Kids Collection</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>SUPPORT</h4>
+                    <ul>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Premium Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Script -->
+    <script src="js/auth.js"></script>
+    <script src="js/shop.js"></script>
+</body>
+
+</html>
