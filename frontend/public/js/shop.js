@@ -56,7 +56,7 @@ function renderProductGrid(gridId, products) {
     if (!grid) return;
 
     if (products.length === 0) {
-        grid.innerHTML = '<p class="text-muted">No products available in this category.</p>';
+        grid.innerHTML = '';
         return;
     }
 
