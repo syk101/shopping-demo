@@ -129,7 +129,7 @@ body {
 .nav-container {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1rem 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -941,7 +941,9 @@ body {
         padding: 0.75rem 1.5rem;
         font-size: var(--font-size-sm);
     }
-}/* User Profile Styles */
+}
+
+/* User Profile Styles */
 .user-profile-nav {
     display: flex;
     align-items: center;
