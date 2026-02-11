@@ -2,7 +2,6 @@
  * Initialize Social Logins
  */
 function initSocialLogins() {
-    console.log('[DEBUG] Current Origin:', window.location.origin);
     // Dynamic Google Client ID setup
     const gIdOnload = document.getElementById('g_id_onload');
     if (gIdOnload && typeof CONFIG !== 'undefined') {
