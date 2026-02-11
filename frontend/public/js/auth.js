@@ -1,4 +1,36 @@
 /**
+ * Initialize Social Logins
+ */
+function initSocialLogins() {
+    console.log('[DEBUG] Current Origin:', window.location.origin);
+    // Dynamic Google Client ID setup
+    const gIdOnload = document.getElementById('g_id_onload');
+    if (gIdOnload && typeof CONFIG !== 'undefined') {
+        if (CONFIG.GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID')) {
+            console.error('CRITICAL: Google Client ID is not configured in js/config.js. Sign-in will fail.');
+            // Add a visual indicator or fallback if needed
+            document.querySelector('.g_id_signin')?.setAttribute('title', 'Please configure Google Client ID in js/config.js');
+        } else {
+            gIdOnload.setAttribute('data-client_id', CONFIG.GOOGLE_CLIENT_ID);
+        }
+    }
+
+    // Initialize Facebook SDK
+    if (typeof FB !== 'undefined' && typeof CONFIG !== 'undefined') {
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: CONFIG.FACEBOOK_APP_ID,
+                cookie: true,
+                xfbml: true,
+                version: 'v18.0'
+            });
+        };
+    }
+}
+
+document.addEventListener('DOMContentLoaded', initSocialLogins);
+
+/**
  * Handles the Google Sign-In credential response
  * @param {Object} response - The response object from Google Identity Services
  */
@@ -18,6 +50,7 @@ function handleCredentialResponse(response) {
         const user = {
             id: responsePayload.sub,
             name: responsePayload.name,
+            given_name: responsePayload.given_name,
             email: responsePayload.email,
             picture: responsePayload.picture
         };
@@ -51,24 +84,31 @@ function handleDemoLogin() {
  * Handles the Facebook Login
  */
 function handleFacebookLogin() {
-    // In a real app, this would use FB.login()
-    // For this demo/GitHub Pages, we emulate a successful login
-    const facebookUser = {
-        id: "fb-user-456",
-        name: "Facebook User",
-        email: "fbuser@example.com",
-        picture: "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10158496459063227&height=200&width=200&ext=1690626302&hash=AeQ3sQd5a3J5bQ6a" // Placeholder FB mockup image
-    };
+    if (typeof FB === 'undefined') {
+        alert('Facebook SDK not loaded yet. Please try again in a moment.');
+        return;
+    }
 
-    // Fallback image if the specific FB URL expires or breaks
-    const fallbackImage = "https://ui-avatars.com/api/?name=Facebook+User&background=1877F2&color=fff";
+    FB.login(function (response) {
+        if (response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', { fields: 'name,email,picture' }, function (response) {
+                console.log('Good to see you, ' + response.name + '.');
 
-    // Check if image loads (optional refinement), but for now simply:
-    facebookUser.picture = fallbackImage;
+                const user = {
+                    id: response.id,
+                    name: response.name,
+                    email: response.email || 'N/A',
+                    picture: response.picture?.data?.url || `https://ui-avatars.com/api/?name=${encodeURIComponent(response.name)}&background=1877F2&color=fff`
+                };
 
-    console.log("Logging in with Facebook (Demo Mode)...");
-    localStorage.setItem('shopUser', JSON.stringify(facebookUser));
-    window.location.href = 'shop.html';
+                localStorage.setItem('shopUser', JSON.stringify(user));
+                window.location.href = 'shop.html';
+            });
+        } else {
+            console.log('User cancelled login or did not fully authorize.');
+        }
+    }, { scope: 'public_profile,email' });
 }
 
 /**

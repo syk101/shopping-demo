@@ -98,8 +98,9 @@
                 <p>Sign in to access your premium account</p>
             </div>
 
-            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-context="signin" data-ux_mode="popup"
-                data-callback="handleCredentialResponse" data-auto_prompt="false">
+            <!-- The Google Client ID will be dynamically set by JS -->
+            <div id="g_id_onload" data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
             </div>
 
             <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
@@ -152,8 +153,13 @@
         </div>
     </div>
 
+    <!-- Load Config First -->
+    <script src="js/config.js"></script>
     <!-- Google Identity Services Script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <!-- Auth Script -->
     <script src="js/auth.js"></script>
 </body>
