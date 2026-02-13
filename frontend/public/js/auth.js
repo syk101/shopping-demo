@@ -120,6 +120,13 @@ function handleDemoLogin() {
  * Handles the Facebook Login
  */
 function handleFacebookLogin() {
+    const isConfigured = typeof CONFIG !== 'undefined' && CONFIG.FACEBOOK_APP_ID && !CONFIG.FACEBOOK_APP_ID.includes('YOUR_FACEBOOK_APP_ID');
+
+    if (!isConfigured) {
+        alert('Facebook Login is not configured. Please add your Facebook App ID to js/config.js to enable this feature.');
+        return;
+    }
+
     if (typeof FB === 'undefined') {
         alert('Facebook SDK not loaded yet. Please try again in a moment.');
         return;
