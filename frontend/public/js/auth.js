@@ -40,16 +40,27 @@ function initSocialLogins() {
         setTimeout(initSocialLogins, 500);
     }
 
-    // Initialize Facebook SDK
-    if (typeof FB !== 'undefined' && typeof CONFIG !== 'undefined') {
+    // -- FACEBOOK LOGIN INITIALIZATION --
+    const FACEBOOK_APP_ID = (typeof CONFIG !== 'undefined' && CONFIG.FACEBOOK_APP_ID && !CONFIG.FACEBOOK_APP_ID.includes('YOUR_FACEBOOK_APP_ID'))
+        ? CONFIG.FACEBOOK_APP_ID
+        : ''; // No valid FB App ID yet
+
+    if (FACEBOOK_APP_ID) {
         window.fbAsyncInit = function () {
             FB.init({
-                appId: CONFIG.FACEBOOK_APP_ID,
+                appId: FACEBOOK_APP_ID,
                 cookie: true,
                 xfbml: true,
                 version: 'v18.0'
             });
         };
+
+        // If FB is already loaded, initialize manually
+        if (typeof FB !== 'undefined') {
+            window.fbAsyncInit();
+        }
+    } else {
+        console.warn('Facebook App ID not configured in js/config.js. Facebook login will be disabled.');
     }
 }
 
