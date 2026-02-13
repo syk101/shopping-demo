@@ -5,5 +5,5 @@
 // -------------------------------------------------------------------------
 const CONFIG = {
     GOOGLE_CLIENT_ID: '224848454993-10s7j2e07cjohqj0222tt8jgj61sg22s.apps.googleusercontent.com',
-    FACEBOOK_APP_ID: 'YOUR_FACEBOOK_APP_ID'
+    FACEBOOK_APP_ID: '922799446870310'
 };

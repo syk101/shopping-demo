@@ -43,7 +43,7 @@ function initSocialLogins() {
     // -- FACEBOOK LOGIN INITIALIZATION --
     const FACEBOOK_APP_ID = (typeof CONFIG !== 'undefined' && CONFIG.FACEBOOK_APP_ID && !CONFIG.FACEBOOK_APP_ID.includes('YOUR_FACEBOOK_APP_ID'))
         ? CONFIG.FACEBOOK_APP_ID
-        : ''; // No valid FB App ID yet
+        : '922799446870310';
 
     if (FACEBOOK_APP_ID) {
         window.fbAsyncInit = function () {
