@@ -5,30 +5,37 @@ function initSocialLogins() {
     console.log('[DEBUG] Current Origin:', window.location.origin);
 
     if (typeof google !== 'undefined' && typeof CONFIG !== 'undefined') {
-        if (CONFIG.GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID')) {
+        if (!CONFIG.GOOGLE_CLIENT_ID || CONFIG.GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID')) {
             console.error('CRITICAL: Google Client ID is not configured in js/config.js');
             return;
         }
 
-        google.accounts.id.initialize({
-            client_id: CONFIG.GOOGLE_CLIENT_ID,
-            callback: handleCredentialResponse,
-            context: 'signin',
-            ux_mode: 'popup',
-            auto_select: false
-        });
-
-        const signinButton = document.querySelector('.g_id_signin');
-        if (signinButton) {
-            google.accounts.id.renderButton(signinButton, {
-                type: 'standard',
-                shape: 'rectangular',
-                theme: 'outline',
-                text: 'signin_with',
-                size: 'large',
-                logo_alignment: 'left'
+        try {
+            google.accounts.id.initialize({
+                client_id: CONFIG.GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse,
+                context: 'signin',
+                ux_mode: 'popup',
+                auto_select: false
             });
+
+            const signinButton = document.getElementById('google-signin-button');
+            if (signinButton) {
+                google.accounts.id.renderButton(signinButton, {
+                    type: 'standard',
+                    shape: 'rectangular',
+                    theme: 'outline',
+                    text: 'signin_with',
+                    size: 'large',
+                    logo_alignment: 'left'
+                });
+            }
+        } catch (error) {
+            console.error('Error initializing Google Sign-In:', error);
         }
+    } else {
+        // If google script hasn't loaded yet, try again in 500ms
+        setTimeout(initSocialLogins, 500);
     }
 
     // Initialize Facebook SDK
