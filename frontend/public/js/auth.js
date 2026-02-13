@@ -2,17 +2,19 @@
  * Initialize Social Logins
  */
 function initSocialLogins() {
-    console.log('[DEBUG] Current Origin:', window.location.origin);
+    // FALLBACK: If config.js fails to load or is cached, we use this hardcoded ID
+    const GOOGLE_CLIENT_ID = (typeof CONFIG !== 'undefined' && CONFIG.GOOGLE_CLIENT_ID && !CONFIG.GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID'))
+        ? CONFIG.GOOGLE_CLIENT_ID
+        : '224848454993-10s7j2e07cjohqj0222tt8jgj61sg22s.apps.googleusercontent.com';
 
-    if (typeof google !== 'undefined' && typeof CONFIG !== 'undefined') {
-        if (!CONFIG.GOOGLE_CLIENT_ID || CONFIG.GOOGLE_CLIENT_ID.includes('YOUR_GOOGLE_CLIENT_ID')) {
-            console.error('CRITICAL: Google Client ID is not configured in js/config.js');
-            return;
-        }
+    console.log('[DEBUG] Current Origin:', window.location.origin);
+    console.log('[DEBUG] Using Client ID:', GOOGLE_CLIENT_ID.substring(0, 10) + '...');
+
+    if (typeof google !== 'undefined') {
 
         try {
             google.accounts.id.initialize({
-                client_id: CONFIG.GOOGLE_CLIENT_ID,
+                client_id: GOOGLE_CLIENT_ID,
                 callback: handleCredentialResponse,
                 context: 'signin',
                 ux_mode: 'popup',
