@@ -274,6 +274,135 @@ def get_inventory():
     finally:
         if conn: conn.close()
 
+@app.route('/api/stats/trends', methods=['GET'])
+def get_stats_trends():
+    conn = None
+    try:
+        conn = get_db_connection()
+        # Revenue and Orders Trends (Last 30 days)
+        # Using RECURSIVE CTE for SQLite to handle missing dates
+        days_query = """
+        WITH RECURSIVE dates(date) AS (
+            SELECT date('now', '-29 days')
+            UNION ALL
+            SELECT date(date, '+1 day') FROM dates WHERE date < date('now')
+        )
+        SELECT 
+            d.date,
+            COALESCE(SUM(o.total_price), 0) as revenue,
+            COALESCE(COUNT(o.id), 0) as orders
+        FROM dates d
+        LEFT JOIN orders o ON date(o.created_at) = d.date
+        GROUP BY d.date
+        ORDER BY d.date ASC
+        """
+        trends = conn.execute(days_query).fetchall()
+        
+        revenue_data = [row['revenue'] for row in trends]
+        orders_data = [row['orders'] for row in trends]
+        
+        # Stock Trend across all category tables
+        valid_tables = ['man_PREMIUM', 'woman_PREMIUM', 'kid_PREMIUM', 'men_casual', 'women_casual', 'kid_casual']
+        stock_values = []
+        for table in valid_tables:
+            try:
+                table_stock = conn.execute(f"SELECT stock_quantity FROM {table}").fetchall()
+                stock_values.extend([s['stock_quantity'] for s in table_stock])
+            except:
+                pass
+        
+        # Limit to last 30 for consistency, and reverse to show distribution
+        stock_data = stock_values[:30]
+        stock_data.reverse()
+        
+        return jsonify({
+            "revenue": revenue_data,
+            "orders": orders_data,
+            "stock": stock_data
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn: conn.close()
+
+# --- Employee Routes ---
+
+@app.route('/api/employees', methods=['GET'])
+def get_employees():
+    conn = None
+    try:
+        conn = get_db_connection()
+        employees = conn.execute('SELECT * FROM employees ORDER BY id DESC').fetchall()
+        return jsonify([dict(e) for e in employees])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn: conn.close()
+
+@app.route('/api/employees', methods=['POST'])
+def add_employee():
+    conn = None
+    try:
+        data = request.json
+        name = data.get('name')
+        salary = data.get('salary', 0)
+        working_hours = data.get('working_hours', 0)
+        shift = data.get('shift', 'Morning')
+        image_data = data.get('image_data')
+
+        if not name:
+            return jsonify({"error": "Name is required"}), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO employees (name, salary, working_hours, shift, image_data)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (name, salary, working_hours, shift, image_data))
+        conn.commit()
+        return jsonify({"id": cursor.lastrowid, "message": "Employee added successfully"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn: conn.close()
+
+@app.route('/api/employees/<int:employee_id>', methods=['PUT'])
+def update_employee(employee_id):
+    conn = None
+    try:
+        data = request.json
+        name = data.get('name')
+        salary = data.get('salary')
+        working_hours = data.get('working_hours')
+        shift = data.get('shift')
+        image_data = data.get('image_data')
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE employees SET name=?, salary=?, working_hours=?, shift=?, image_data=?
+            WHERE id=?
+        ''', (name, salary, working_hours, shift, image_data, employee_id))
+        conn.commit()
+        return jsonify({"message": "Employee updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn: conn.close()
+
+@app.route('/api/employees/<int:employee_id>', methods=['DELETE'])
+def delete_employee(employee_id):
+    conn = None
+    try:
+        conn = get_db_connection()
+        conn.execute('DELETE FROM employees WHERE id=?', (employee_id,))
+        conn.commit()
+        return jsonify({"message": "Employee deleted successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn: conn.close()
+
 # --- Frontend Serving ---
 
 @app.route('/')
