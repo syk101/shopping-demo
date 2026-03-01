@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let PRODUCT_DATABASE = [];
     try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch('/api/products');
         const dbProducts = await response.json();
 
         PRODUCT_DATABASE = dbProducts.map(p => {
