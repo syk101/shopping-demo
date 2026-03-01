@@ -34,17 +34,17 @@ const buttons = {
     addProduct: document.getElementById('add-product-btn'),
     addOrder: document.getElementById('add-order-btn'),
     addEmployee: document.getElementById('add-employee-btn'),
-    saveProduct: document.getElementById('save-product'),
-    saveOrder: document.getElementById('save-order'),
-    saveEmployee: document.getElementById('save-employee'),
     saveInventory: document.getElementById('save-inventory'),
-    confirmDelete: document.getElementById('confirm-delete')
+    confirmDelete: document.getElementById('confirm-delete'),
+    sidebarToggle: document.getElementById('sidebar-toggle'),
+    sidebarOverlay: document.getElementById('sidebar-overlay')
 };
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function () {
     initializeApp();
     setupEventListeners();
+    setupResponsiveSidebar();
     loadDashboardData();
 });
 
@@ -266,6 +266,35 @@ function setupEventListeners() {
             renderProductsTable();
         });
     });
+}
+
+// Sidebar Responsiveness
+function setupResponsiveSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const toggle = document.getElementById('sidebar-toggle');
+
+    if (toggle && sidebar && overlay) {
+        toggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Close sidebar on link click on mobile
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+    }
 }
 
 // Page Navigation

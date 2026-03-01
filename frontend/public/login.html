@@ -14,78 +14,62 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            padding: 1.5rem;
         }
 
         .login-box {
             background: rgba(255, 255, 255, 0.95);
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
             backdrop-filter: blur(10px);
-        }
-
-        .login-header {
-            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .login-header i {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #1a1a1a;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .login-header h1 {
-            font-size: 2rem;
+            font-size: 1.75rem;
             color: #1a1a1a;
             margin-bottom: 0.5rem;
-            font-weight: 300;
-            letter-spacing: 2px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
         }
 
         .login-header p {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
         }
 
-        .divider {
-            height: 1px;
-            background: #ddd;
-            margin: 2rem 0;
-            position: relative;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .divider span {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0 10px;
-            color: #888;
-            font-size: 0.8rem;
-        }
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 1.5rem;
+            }
 
-        .google-btn-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 1.5rem;
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 1.5rem;
-            color: #666;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-
-        .login-link {
-            display: none;
-            /* Hide login link in login page */
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
