@@ -28,7 +28,7 @@ To make Google and Facebook login workable for your hosted site, follow these st
 6. Copy the **App ID** and paste it into `frontend/public/js/config.js`.
 
 ## Hosting
-This project is designed to be hosted on platforms like GitHub Pages, Vercel, or Netlify.
+This project is designed to be hosted on platforms like GitHub Pages, Render/
 - Home: `index.html`
 - Shop: `shop.html`
 - Login: `login.html`
