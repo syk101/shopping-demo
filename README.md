@@ -29,6 +29,6 @@ To make Google and Facebook login workable for your hosted site, follow these st
 
 ## Hosting
 This project is designed to be hosted on platforms like GitHub Pages, Render/
-- Home: `index.html`
+- DashBoard: `index.html`
 - Shop: `shop.html`
 - Login: `login.html`
