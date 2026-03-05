@@ -30,26 +30,24 @@ def row_to_dict(row):
 
 @app.route('/api/products', methods=['GET'])
 def get_all_products():
-    valid_tables = ['woman_PREMIUM', 'women_casual', 'man_PREMIUM', 'men_casual', 'kid_PREMIUM', 'kid_casual']
-    all_products = []
     conn = None
     try:
         conn = get_db_connection()
-        for table in valid_tables:
-            products = conn.execute(f'SELECT * FROM {table}').fetchall()
-            for p in products:
-                d = row_to_dict(p)
-                if 'woman' in table or 'women' in table:
-                    d['category'] = 'women'
-                elif 'man' in table or 'men' in table:
-                    d['category'] = 'men'
-                elif 'kid' in table:
-                    d['category'] = 'kid'
-                else:
-                    d['category'] = 'other'
-                d['table_name'] = table
-                all_products.append(d)
-        return jsonify(all_products)
+        products = conn.execute("SELECT *, 'products' as table_name FROM products").fetchall()
+        result = []
+        for p in products:
+            d = row_to_dict(p)
+            cat = d['category'].lower()
+            if 'woman' in cat or 'women' in cat:
+                d['category_group'] = 'women'
+            elif 'man' in cat or 'men' in cat:
+                d['category_group'] = 'men'
+            elif 'kid' in cat:
+                d['category_group'] = 'kid'
+            else:
+                d['category_group'] = 'other'
+            result.append(d)
+        return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:

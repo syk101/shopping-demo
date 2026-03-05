@@ -20,17 +20,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             let collection = '';
             let category = '';
 
-            if (p.table_name === 'man_PREMIUM') { collection = 'mens'; category = 'suits'; }
-            if (p.table_name === 'men_casual') { collection = 'mens'; category = 'casual'; }
-            if (p.table_name === 'woman_PREMIUM') { collection = 'womens'; category = 'evening'; }
-            if (p.table_name === 'women_casual') { collection = 'womens'; category = 'everyday'; }
-            if (p.table_name === 'kid_PREMIUM') { collection = 'kids'; category = 'school'; }
-            if (p.table_name === 'kid_casual') { collection = 'kids'; category = 'playtime'; }
+            const cat = p.category;
+            if (cat === 'men_PREMIUM') { collection = 'mens'; category = 'suits'; }
+            if (cat === 'men_CASUAL') { collection = 'mens'; category = 'casual'; }
+            if (cat === 'women_PREMIUM') { collection = 'womens'; category = 'evening'; }
+            if (cat === 'women_CASUAL') { collection = 'womens'; category = 'everyday'; }
+            if (cat === 'kids_PREMIUM') { collection = 'kids'; category = 'school'; }
+            if (cat === 'kids_CASUAL') { collection = 'kids'; category = 'playtime'; }
 
-            let imageUrl = p.image_url || 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80';
-            if (p.image_data) {
-                imageUrl = 'data:image/jpeg;base64,' + p.image_data;
-            }
+            let imageUrl = p.image || 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&q=80';
 
             return {
                 id: p.id.toString(),
@@ -39,9 +37,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 category: category,
                 collection: collection,
                 image: imageUrl,
-                rating: 4.5,
-                reviews: Math.floor(Math.random() * 200) + 10,
-                badge: p.stock_quantity <= 5 && p.stock_quantity > 0 ? 'LOW STOCK' : (p.stock_quantity === 0 ? 'OUT OF STOCK' : '')
+                rating: p.rating || 4.5,
+                reviews: p.sales_count || Math.floor(Math.random() * 200) + 10,
+                badge: p.stock <= 5 && p.stock > 0 ? 'LOW STOCK' : (p.stock === 0 ? 'OUT OF STOCK' : '')
             };
         });
     } catch (e) {

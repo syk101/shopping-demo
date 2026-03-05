@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET products by table
-router.get('/:tableName', async (req, res) => {
+// GET products by category
+router.get('/:category', async (req, res) => {
     try {
         const products = await Product.getAll();
-        const filtered = products.filter(p => p.table_name === req.params.tableName);
+        const filtered = products.filter(p => p.category === req.params.category);
         res.json(filtered);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -24,9 +24,9 @@ router.get('/:tableName', async (req, res) => {
 });
 
 // POST create a new product
-router.post('/:tableName', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const product = await Product.create(req.params.tableName, req.body);
+        const product = await Product.create(req.body);
         res.status(201).json(product);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -34,9 +34,9 @@ router.post('/:tableName', async (req, res) => {
 });
 
 // PUT update a product
-router.put('/:tableName/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const product = await Product.update(req.params.id, req.params.tableName, req.body);
+        const product = await Product.update(req.params.id, req.body);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
@@ -47,9 +47,9 @@ router.put('/:tableName/:id', async (req, res) => {
 });
 
 // DELETE a product
-router.delete('/:tableName/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
-        const success = await Product.delete(req.params.id, req.params.tableName);
+        const success = await Product.delete(req.params.id);
         if (!success) {
             return res.status(404).json({ message: 'Product not found' });
         }

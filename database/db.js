@@ -71,48 +71,47 @@ function all(sql, params = []) {
 // Product functions
 const Product = {
   getAll: async () => {
-    const validTables = ['woman_PREMIUM', 'women_casual', 'man_PREMIUM', 'men_casual', 'kid_PREMIUM', 'kid_casual'];
-    let allProducts = [];
-    for (const table of validTables) {
-      try {
-        const products = await all(`SELECT *, '${table}' as table_name FROM ${table}`);
-        // Add category based on table name (similar to app.py)
-        const productsWithCategory = products.map(p => {
-          let category = 'other';
-          if (table.toLowerCase().includes('woman') || table.toLowerCase().includes('women')) category = 'women';
-          else if (table.toLowerCase().includes('man') || table.toLowerCase().includes('men')) category = 'men';
-          else if (table.toLowerCase().includes('kid')) category = 'kid';
-          return { ...p, category };
-        });
-        allProducts = allProducts.concat(productsWithCategory);
-      } catch (err) {
-        console.error(`Error fetching from table ${table}:`, err.message);
-      }
+    try {
+      const products = await all("SELECT *, 'products' as table_name FROM products");
+      const productsWithCategory = products.map(p => {
+        let category_group = 'other';
+        const cat = p.category ? p.category.toLowerCase() : '';
+        if (cat.includes('woman') || cat.includes('women')) category_group = 'women';
+        else if (cat.includes('man') || cat.includes('men')) category_group = 'men';
+        else if (cat.includes('kid')) category_group = 'kid';
+        return { ...p, category_group };
+      });
+      return productsWithCategory;
+    } catch (err) {
+      console.error(`Error fetching products:`, err.message);
+      return [];
     }
-    return allProducts;
   },
-  getById: (id, tableName) => get(`SELECT * FROM ${tableName} WHERE id = ?`, [id]),
-  create: async (tableName, data) => {
-    const { name, description, price, stock_quantity, image_data } = data;
+  getById: (id) => get(`SELECT * FROM products WHERE id = ?`, [id]),
+  create: async (data) => {
+    const { name, description, price, stock_quantity, category, image, rating, discount, is_featured, sales_count, ai_score } = data;
     const result = await run(
-      `INSERT INTO ${tableName} (name, description, price, stock_quantity, image_data) VALUES (?, ?, ?, ?, ?)`,
-      [name, description, price, stock_quantity, image_data || null]
+      `INSERT INTO products (name, description, price, stock, category, image, rating, discount, is_featured, sales_count, ai_score) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, description, price, stock_quantity || data.stock, category, image, rating || 4.5, discount || 0, is_featured || 0, sales_count || 0, ai_score || 0.5]
     );
-    return await Product.getById(result.id, tableName);
+    return await Product.getById(result.id);
   },
-  update: async (id, tableName, data) => {
-    const { name, description, price, stock_quantity, image_data } = data;
+  update: async (id, data) => {
+    const { name, description, price, stock, image, rating, discount, is_featured } = data;
     await run(
-      `UPDATE ${tableName} SET 
+      `UPDATE products SET 
              name = COALESCE(?, name), 
              description = COALESCE(?, description), 
              price = COALESCE(?, price), 
-             stock_quantity = COALESCE(?, stock_quantity),
-             image_data = COALESCE(?, image_data)
+             stock = COALESCE(?, stock),
+             image = COALESCE(?, image),
+             rating = COALESCE(?, rating),
+             discount = COALESCE(?, discount),
+             is_featured = COALESCE(?, is_featured)
              WHERE id = ?`,
-      [name, description, price, stock_quantity, image_data, id]
+      [name, description, price, stock, image, rating, discount, is_featured, id]
     );
-    return await Product.getById(id, tableName);
+    return await Product.getById(id);
   },
   delete: async (id, tableName) => {
     const result = await run(`DELETE FROM ${tableName} WHERE id = ?`, [id]);
@@ -123,20 +122,14 @@ const Product = {
 // Order functions
 const Order = {
   getAll: async () => {
-    const validTables = ['woman_PREMIUM', 'women_casual', 'man_PREMIUM', 'men_casual', 'kid_PREMIUM', 'kid_casual'];
     const orders = await all('SELECT * FROM orders ORDER BY id DESC');
-
-    // Enrich orders with product names (similar to app.py)
     const enrichedOrders = await Promise.all(orders.map(async (order) => {
-      if (validTables.includes(order.product_category)) {
-        try {
-          const product = await get(`SELECT name FROM ${order.product_category} WHERE id = ?`, [order.product_id]);
-          return { ...order, product_name: product ? product.name : 'Unknown Product' };
-        } catch (err) {
-          return { ...order, product_name: 'Error: Table Missing' };
-        }
+      try {
+        const product = await get(`SELECT name FROM products WHERE id = ?`, [order.product_id]);
+        return { ...order, product_name: product ? product.name : 'Unknown Product' };
+      } catch (err) {
+        return { ...order, product_name: 'Error: Product Missing' };
       }
-      return { ...order, product_name: `Invalid Category (${order.product_category})` };
     }));
     return enrichedOrders;
   },
@@ -163,32 +156,24 @@ const Order = {
 // Inventory functions
 const Inventory = {
   getAll: async () => {
-    const validTables = ['woman_PREMIUM', 'women_casual', 'man_PREMIUM', 'men_casual', 'kid_PREMIUM', 'kid_casual'];
-    let allInventory = [];
-    for (const table of validTables) {
-      try {
-        const items = await all(`SELECT id, name, stock_quantity, '${table}' as table_name FROM ${table}`);
-        const formattedItems = items.map(item => ({
-          ...item,
-          product_id: item.id,
-          table: table,
-          min_stock_level: 5 // Default
-        }));
-        allInventory = allInventory.concat(formattedItems);
-      } catch (err) {
-        console.error(`Error fetching inventory from ${table}:`, err.message);
-      }
+    try {
+      const items = await all(`SELECT id, name, stock as stock_quantity, category as table_name FROM products`);
+      return items.map(item => ({
+        ...item,
+        product_id: item.id,
+        table: item.table_name,
+        min_stock_level: 5
+      }));
+    } catch (err) {
+      console.error(`Error fetching inventory:`, err.message);
+      return [];
     }
-    return allInventory;
   },
-  getById: (id, tableName) => get(`SELECT id, name, stock_quantity FROM ${tableName} WHERE id = ?`, [id]),
-  update: async (id, tableName, data) => {
+  getById: (id) => get(`SELECT id, name, stock as stock_quantity FROM products WHERE id = ?`, [id]),
+  update: async (id, data) => {
     const { stock_quantity } = data;
-    await run(
-      `UPDATE ${tableName} SET stock_quantity = ? WHERE id = ?`,
-      [stock_quantity, id]
-    );
-    return await Inventory.getById(id, tableName);
+    await run(`UPDATE products SET stock = ? WHERE id = ?`, [stock_quantity, id]);
+    return await Inventory.getById(id);
   }
 };
 
@@ -260,10 +245,7 @@ const Stats = {
       ORDER BY d.date ASC
     `);
 
-    // For stock trend, pull stock levels across all category tables
-    const tables = ['man_PREMIUM', 'woman_PREMIUM', 'kid_PREMIUM', 'men_casual', 'women_casual', 'kid_casual'];
-    const stockTrendQuery = tables.map(t => `SELECT stock_quantity as value FROM ${t}`).join(' UNION ALL ');
-    const stockTrend = await all(`${stockTrendQuery} LIMIT 30`);
+    const stockTrend = await all(`SELECT stock as value FROM products LIMIT 30`);
 
     return {
       revenue: revenueTrend.map(r => r.value),
