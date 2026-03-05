@@ -12,7 +12,7 @@ const navLinks = document.querySelectorAll('.nav-link');
 const pages = document.querySelectorAll('.page');
 const pageTitle = document.getElementById('page-title');
 
-let currentProductTable = 'man_PREMIUM'; // initial table
+let currentProductTable = 'men_PREMIUM'; // initial table
 
 // Modal Elements
 const modals = {
@@ -183,7 +183,7 @@ function filterOrders(searchTerm) {
     }
 
     tbody.innerHTML = filteredOrders.map(order => {
-        const product = currentProducts.find(p => p.id === order.product_id && p.table_name === order.product_category);
+        const product = currentProducts.find(p => p.id === order.product_id);
         return `
             <tr>
                 <td>${order.id}</td>
@@ -262,7 +262,7 @@ function setupEventListeners() {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
-            currentProductTable = e.target.dataset.table;
+            currentProductTable = e.target.dataset.table; // This now refers to 'category' column
             renderProductsTable();
         });
     });
@@ -409,7 +409,7 @@ async function loadDashboardData() {
     document.getElementById('total-orders').textContent = currentOrders.length;
 
     // Calculate low stock items
-    const lowStockItems = currentInventory.filter(item => item.stock_quantity <= (item.min_stock_level || 10));
+    const lowStockItems = currentInventory.filter(item => item.stock_quantity <= 5);
     document.getElementById('low-stock').textContent = lowStockItems.length;
 
     // Calculate total revenue
@@ -567,13 +567,13 @@ function renderLowStockAlerts() {
     }
 
     container.innerHTML = lowStockItems.map(item => {
-        const product = currentProducts.find(p => p.id === item.product_id && p.table_name === item.table);
+        const product = currentProducts.find(p => p.id === item.product_id);
         return `
             <div class="activity-item card-hover">
                 <div class="activity-details">
                     <h4>${product?.name || 'Unknown Product'}</h4>
-                    <p>Current: ${item.stock_quantity} | Min: ${item.min_stock_level || 10}</p>
-                    <small class="text-muted">Last updated: ${new Date(item.last_updated).toLocaleDateString()}</small>
+                    <p>Current: ${item.stock_quantity} | Min: 5</p>
+                    <small class="text-muted">Status: Needs Restock</small>
                 </div>
                 <span class="activity-status status-low">LOW STOCK</span>
             </div>
@@ -607,7 +607,7 @@ function sortTable(column, direction = 'asc', tableId) {
 // Product Management
 function renderProductsTable() {
     const tbody = document.querySelector('#products-table tbody');
-    const filteredProducts = currentProducts.filter(p => p.table_name === currentProductTable);
+    const filteredProducts = currentProducts.filter(p => p.category === currentProductTable);
 
     if (filteredProducts.length === 0) {
         tbody.innerHTML = `
@@ -712,14 +712,14 @@ async function saveProduct() {
     try {
         if (id) {
             // Update existing product
-            await apiRequest(`/products/${tableName}/${id}`, {
+            await apiRequest(`/products/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(productData)
             });
             showNotification('Product updated successfully', 'success');
         } else {
             // Create new product
-            await apiRequest(`/products/${tableName}`, {
+            await apiRequest(`/products`, {
                 method: 'POST',
                 body: JSON.stringify(productData)
             });

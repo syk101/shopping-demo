@@ -5,20 +5,20 @@ class ProductModel {
         return await Product.getAll();
     }
 
-    static async getById(id, tableName) {
-        return await Product.getById(id, tableName);
+    static async getById(id) {
+        return await Product.getById(id);
     }
 
-    static async create(tableName, data) {
-        return await Product.create(tableName, data);
+    static async create(data) {
+        return await Product.create(data);
     }
 
-    static async update(id, tableName, data) {
-        return await Product.update(id, tableName, data);
+    static async update(id, data) {
+        return await Product.update(id, data);
     }
 
-    static async delete(id, tableName) {
-        return await Product.delete(id, tableName);
+    static async delete(id) {
+        return await Product.delete(id);
     }
 }
 
