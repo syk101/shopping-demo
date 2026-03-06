@@ -2,12 +2,16 @@ CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
-    category TEXT,
-    price REAL NOT NULL,
     image TEXT,
-    stock_quantity INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    category TEXT NOT NULL,
+    price REAL NOT NULL,
+    stock INTEGER NOT NULL DEFAULT 0,
+    rating REAL DEFAULT 4.5,
+    discount INTEGER DEFAULT 0,
+    is_featured BOOLEAN DEFAULT 0,
+    sales_count INTEGER DEFAULT 0,
+    ai_score REAL DEFAULT 0.5,
+    created DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS inventory (
