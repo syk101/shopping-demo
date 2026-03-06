@@ -136,7 +136,12 @@ function filterProducts(searchTerm) {
     }
 
     tbody.innerHTML = filteredProducts.map(product => {
-        const imageUrl = product.image_data ? 'data:image/jpeg;base64,' + product.image_data : 'https://via.placeholder.com/50';
+        let imageUrl = 'https://via.placeholder.com/50';
+        if (product.image) {
+            imageUrl = product.image;
+        } else if (product.image_data) {
+            imageUrl = 'data:image/jpeg;base64,' + product.image_data;
+        }
         return `
         <tr>
             <td>${product.id}</td>
@@ -625,7 +630,12 @@ function renderProductsTable() {
     }
 
     tbody.innerHTML = filteredProducts.map(product => {
-        const imageUrl = product.image_data ? 'data:image/jpeg;base64,' + product.image_data : 'https://via.placeholder.com/50';
+        let imageUrl = 'https://via.placeholder.com/50';
+        if (product.image) {
+            imageUrl = product.image;
+        } else if (product.image_data) {
+            imageUrl = 'data:image/jpeg;base64,' + product.image_data;
+        }
         return `
         <tr>
             <td>${product.id}</td>
@@ -670,7 +680,9 @@ function openProductModal(productId = null, tableName = null) {
             document.getElementById('product-price').value = product.price;
             document.getElementById('product-stock').value = product.stock_quantity || 0;
 
-            if (product.image_data) {
+            if (product.image) {
+                imgPreview.innerHTML = `<img src="${product.image}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">`;
+            } else if (product.image_data) {
                 imgPreview.innerHTML = `<img src="data:image/jpeg;base64,${product.image_data}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;">`;
             }
         }

@@ -228,73 +228,10 @@
                 <p>Our most popular items loved by customers</p>
             </div>
             <div class="products-grid" id="featured-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="image-placeholder"></div>
-                        <div class="product-badge">NEW</div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Premium Wool Suit</h3>
-                        <p class="product-description">Handcrafted Italian wool suit with perfect fit</p>
-                        <div class="product-price">$499.99</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(128)</span>
-                        </div>
-                        <button class="btn btn-primary btn-small" onclick="addToCart(1)">
-                            ADD TO CART
-                        </button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="image-placeholder"></div>
-                        <div class="product-badge sale">SALE</div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Elegant Evening Gown</h3>
-                        <p class="product-description">Stunning silk evening dress for special occasions</p>
-                        <div class="product-price">
-                            <span class="original-price">$299.99</span>
-                            <span class="sale-price">$199.99</span>
-                        </div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(89)</span>
-                        </div>
-                        <button class="btn btn-primary btn-small" onclick="addToCart(2)">
-                            ADD TO CART
-                        </button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <div class="image-placeholder"></div>
-                    </div>
-                    <div class="product-info">
-                        <h3>Kids Play Set</h3>
-                        <p class="product-description">Comfortable cotton play outfit for active kids</p>
-                        <div class="product-price">$39.99</div>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>(64)</span>
-                        </div>
-                        <button class="btn btn-primary btn-small" onclick="addToCart(3)">
-                            ADD TO CART
-                        </button>
-                    </div>
+                <!-- Products will be loaded dynamically from the database -->
+                <div class="loading-spinner" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #1a1a1a;"></i>
+                    <p style="margin-top: 1rem;">Loading featured collections...</p>
                 </div>
             </div>
         </div>

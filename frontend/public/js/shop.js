@@ -19,6 +19,24 @@ function initializeShop() {
 
     // Set up scroll effects
     setupScrollEffects();
+
+    // Load dynamic featured products
+    loadFeaturedProducts();
+}
+
+async function loadFeaturedProducts() {
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('Failed to fetch products');
+        const allProducts = await response.json();
+
+        // Take first 3 as featured (one from each main category if possible, or just first 3)
+        const featured = allProducts.slice(0, 3);
+
+        renderProductGrid('featured-grid', featured);
+    } catch (error) {
+        console.error('Error loading featured products:', error);
+    }
 }
 
 
@@ -28,31 +46,44 @@ function renderProductGrid(gridId, products) {
     if (!grid) return;
 
     if (products.length === 0) {
-        grid.innerHTML = '';
+        grid.innerHTML = '<div class="empty-state">No products found</div>';
         return;
     }
 
-    grid.innerHTML = products.map(product => `
+    grid.innerHTML = products.map(product => {
+        const imageUrl = product.image || 'https://via.placeholder.com/300';
+        const rating = product.rating || 4.5;
+        const reviews = product.sales_count || Math.floor(Math.random() * 100) + 20;
+
+        // Stars calculation
+        let starsHtml = '';
+        const fullStars = Math.floor(rating);
+        for (let i = 0; i < fullStars; i++) starsHtml += '<i class="fas fa-star"></i>';
+        if (rating % 1 !== 0) starsHtml += '<i class="fas fa-star-half-alt"></i>';
+        const emptyStars = 5 - Math.ceil(rating);
+        for (let i = 0; i < emptyStars; i++) starsHtml += '<i class="far fa-star"></i>';
+
+        return `
         <div class="product-card">
             <div class="product-image">
-                <img src="${product.image || 'https://via.placeholder.com/300'}" alt="${product.name}">
-                <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
-                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
+                <img src="${imageUrl}" alt="${product.name}" loading="lazy">
+                ${product.stock_quantity <= 5 && product.stock_quantity > 0 ? '<div class="product-badge">LOW STOCK</div>' : ''}
+                ${product.stock_quantity === 0 ? '<div class="product-badge sale">OUT OF STOCK</div>' : ''}
             </div>
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <p class="price">$${parseFloat(product.price).toFixed(2)}</p>
-                <div class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
+                <p class="product-description">${product.description || 'Premium quality apparel crafted for comfort and style.'}</p>
+                <div class="product-price">$${parseFloat(product.price).toFixed(2)}</div>
+                <div class="product-rating">
+                    ${starsHtml}
+                    <span>(${reviews})</span>
                 </div>
+                <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">
+                    ADD TO CART
+                </button>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 // Set up mobile menu
