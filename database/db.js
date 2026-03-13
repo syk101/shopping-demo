@@ -1,4 +1,4 @@
-﻿const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 
@@ -64,6 +64,13 @@ function getImageUrl(name, category, id) {
     else if (n.includes('tee')) keywords = 'womens,casual,top';
     else keywords = 'womens,casual,wear';
   } else if (c.includes('kids_premium')) {
+    const images = fs.readdirSync(path.join(__dirname, '../frontend/public/kid_premium'))
+      .filter(f => f.endsWith('.jpg') || f.endsWith('.png') || f.endsWith('.webp'));
+    if (images.length > 0) {
+      const imgIndex = (id - 1) % images.length;
+      return `kid_premium/${images[imgIndex]}`;
+    }
+    // Fallback if no local images found
     if (n.includes('vest')) keywords = 'kids,formal,vest';
     else if (n.includes('dress') || n.includes('gown') || n.includes('party')) keywords = 'kids,party,dress';
     else if (n.includes('blazer')) keywords = 'kids,formal,blazer';
@@ -76,6 +83,13 @@ function getImageUrl(name, category, id) {
     else if (n.includes('booties') || n.includes('baby')) keywords = 'kids,baby,shoes';
     else keywords = 'kids,elegant,clothing';
   } else if (c.includes('kids_casual')) {
+    const images = fs.readdirSync(path.join(__dirname, '../frontend/public/kid_casual'))
+      .filter(f => f.endsWith('.jpg') || f.endsWith('.png') || f.endsWith('.webp'));
+    if (images.length > 0) {
+      const imgIndex = (id - 1) % images.length;
+      return `kid_casual/${images[imgIndex]}`;
+    }
+    // Fallback if no local images found
     if (n.includes('graphic') || n.includes('tee')) keywords = 'kids,graphic,tee';
     else if (n.includes('sweatpants')) keywords = 'kids,sweatpants,casual';
     else if (n.includes('sneakers')) keywords = 'kids,sneakers,running';
