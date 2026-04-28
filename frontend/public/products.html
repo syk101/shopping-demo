@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Premium Shop</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/shop.css">
+    <link rel="stylesheet" href="styles/products.css">
+</head>
+
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav" style="background: rgba(255, 255, 255, 0.98); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <div class="nav-container">
+            <div class="logo" style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600;">
+                <i class="fas fa-store" style="font-size: 1.2rem; margin-right: 5px;"></i>
+                <span>Weary</span>
+            </div>
+            <div class="nav-links">
+                <a href="shop.html" class="nav-link">Home</a>
+                <a href="men.html" class="nav-link">Men</a>
+                <a href="women.html" class="nav-link">Women</a>
+                <a href="kids.html" class="nav-link">Kids</a>
+            </div>
+            <div class="nav-actions" style="display: flex; gap: 1rem; align-items: center; color: #1a1a1a;">
+                <i class="fas fa-search" style="cursor: pointer;"></i>
+                <i class="far fa-heart" style="cursor: pointer;"></i>
+                <div style="position: relative; cursor: pointer;">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header (Minimalist) -->
+    <section class="products-header">
+        <div class="container container-header">
+            <div class="breadcrumb">
+                <a href="shop.html">Home</a> <i class="fas fa-chevron-right"
+                    style="font-size: 0.6rem; margin: 0 8px; color: #ccc;"></i> <span
+                    id="breadcrumb-current">Products</span>
+            </div>
+            <h1 id="category-title">All Products</h1>
+            <p id="category-subtitle">Explore our premium selection</p>
+        </div>
+    </section>
+
+    <!-- Main Layout: Sidebar + Grid -->
+    <section class="products-main-layout">
+        <div class="container products-container">
+
+            <!-- Sidebar Filters -->
+            <aside class="products-sidebar">
+                <div class="filter-group">
+                    <h3>Categories</h3>
+                    <ul class="filter-list">
+                        <li><label><input type="checkbox"> Suits</label></li>
+                        <li><label><input type="checkbox"> Casual</label></li>
+                        <li><label><input type="checkbox"> Evening</label></li>
+                        <li><label><input type="checkbox"> Everyday</label></li>
+                        <li><label><input type="checkbox"> Activewear</label></li>
+                    </ul>
+                </div>
+                <div class="filter-group">
+                    <h3>Price Range</h3>
+                    <div class="filter-price">
+                        <input type="range" min="0" max="1000" value="1000" class="price-slider">
+                        <div class="price-labels">
+                            <span>$0</span>
+                            <span>$1000+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3>Size</h3>
+                    <div class="size-boxes">
+                        <div class="size-box">S</div>
+                        <div class="size-box">M</div>
+                        <div class="size-box">L</div>
+                        <div class="size-box">XL</div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3>Color</h3>
+                    <div class="color-circles">
+                        <div class="color-circle" style="background-color: #000;"></div>
+                        <div class="color-circle" style="background-color: #fff; border: 1px solid #ddd;"></div>
+                        <div class="color-circle" style="background-color: #0b2d6a;"></div>
+                        <div class="color-circle" style="background-color: #6a1b1b;"></div>
+                        <div class="color-circle" style="background-color: #d1bda0;"></div>
+                    </div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">Apply Filters</button>
+            </aside>
+
+            <!-- Product Grid Area -->
+            <div class="products-content">
+                <div class="products-toolbar">
+                    <div class="results-count"><span id="results-count-number">0</span> Items</div>
+                    <div class="sort-options">
+                        <select id="sort-select">
+                            <option value="featured">Sort by: Featured</option>
+                            <option value="newest">Sort by: Newest</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dynamic Grid -->
+                <div class="products-grid-modern" id="dynamic-products-grid">
+                    <!-- Products will be injected here via JavaScript -->
+                </div>
+
+                <div id="no-products-message" class="empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h2>No Products Found</h2>
+                    <p>We couldn't find any products matching your criteria.</p>
+                    <a href="shop.html" class="btn btn-primary">Return to Shop</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer" style="margin-top: auto;">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Weary Premium Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load Scripts -->
+    <script src="js/config.js?v=2"></script>
+    <script src="js/auth.js?v=2"></script>
+    <script src="js/products.js?v=2"></script>
+</body>
+
+</html>

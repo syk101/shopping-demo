@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Weary Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/shop.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            padding: 1.5rem;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .login-header i {
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+        }
+
+        .login-header h1 {
+            font-size: 1.75rem;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 1.5rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Main Navigation (Minimal for Login Page) -->
+    <nav class="main-nav" style="padding: 1rem; position: absolute; width: 100%; top: 0; left: 0; z-index: 100;">
+        <div class="nav-container"
+            style="display: flex; justify-content: flex-end; width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <div class="nav-links" style="display: flex; align-items: center; gap: 1rem;">
+                <!-- Auth script will inject mini profile here if logged in -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fas fa-store"></i>
+                <h1>WELCOME BACK</h1>
+                <p>Sign in to access your premium account</p>
+            </div>
+
+            <!-- Google Sign-In Button Container -->
+            <div id="google-signin-button" class="google-btn-wrapper"></div>
+
+            <!-- Demo Login Button for development/testing -->
+            <button onclick="handleDemoLogin()" class="demo-login-btn" style="
+                margin-top: 1rem;
+                width: 100%;
+                padding: 10px;
+                border: 1px dashed #666;
+                background: #f8f9fa;
+                border-radius: 4px;
+                cursor: pointer;
+                color: #555;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            ">
+                <i class="fas fa-user-secret"></i> Test with Demo Account
+            </button>
+
+            <!-- Facebook Login Button (Demo) -->
+            <div class="facebook-btn-wrapper" style="margin-top: 1rem; text-align: center;">
+                <button onclick="handleFacebookLogin()" style="
+                    background: #1877F2;
+                    color: white;
+                    border: none;
+                    padding: 10px;
+                    border-radius: 4px;
+                    font-size: 0.9rem;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                " onmouseover="this.style.background='#166fe5'" onmouseout="this.style.background='#1877F2'">
+                    <i class="fab fa-facebook-f"></i> Sign in with Facebook
+                </button>
+            </div>
+
+            <a href="shop.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Shop
+            </a>
+        </div>
+    </div>
+
+    <!-- Load Config First -->
+    <script src="js/config.js"></script>
+    <!-- Google Identity Services Script -->
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <!-- Auth Script -->
+    <script src="js/auth.js"></script>
+</body>
+
+</html>
