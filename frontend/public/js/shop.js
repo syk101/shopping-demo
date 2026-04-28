@@ -26,9 +26,11 @@ function initializeShop() {
 
 async function loadFeaturedProducts() {
     try {
+        console.log('Fetching products from /api/products...');
         const response = await fetch('/api/products');
         if (!response.ok) throw new Error('Failed to fetch products');
         const allProducts = await response.json();
+        console.log('Products fetched:', allProducts.length);
 
         // Filter products that have is_featured set to 1
         const featuredProducts = allProducts.filter(p => p.is_featured === 1);
@@ -36,6 +38,7 @@ async function loadFeaturedProducts() {
         // Take up to 3 featured products. If less than 3, we just show what we have, or fallback to first 3 if none.
         const featured = featuredProducts.length > 0 ? featuredProducts.slice(0, 3) : allProducts.slice(0, 3);
 
+        console.log('Rendering featured products:', featured.length);
         renderProductGrid('featured-grid', featured);
     } catch (error) {
         console.error('Error loading featured products:', error);
@@ -259,7 +262,7 @@ function viewProducts(collection, category) {
 }
 
 // Add to cart function
-function addToCart(productId) {
+window.addToCart = function(productId) {
     const button = event.target;
     const originalText = button.textContent;
 

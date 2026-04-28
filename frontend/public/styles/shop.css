@@ -145,6 +145,13 @@ body {
     font-size: var(--font-size-xl);
     font-weight: 700;
     color: var(--secondary-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.logo:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
 }
 
 .logo i {
@@ -561,7 +568,7 @@ body {
 
 /* Featured Products */
 .featured-products {
-    padding: 6rem 0;
+    padding: 4rem 0;
     background: var(--dark-bg);
     color: var(--text-light);
 }
@@ -1029,4 +1036,177 @@ body {
     background: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+/* Camera Search Feature */
+.camera-btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    z-index: 1001;
+    margin-left: 0.5rem;
+}
+
+.camera-btn:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-container {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    animation: modalSlideUp 0.4s ease;
+}
+
+@keyframes modalSlideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--light-bg);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+#camera-view-container {
+    width: 100%;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background: #000;
+    position: relative;
+}
+
+#camera-video {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.camera-controls {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.upload-fallback {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.upload-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Results Grid */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.results-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-grid::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+/* Shimmer Loading */
+.shimmer-container {
+    padding: 2rem 0;
+}
+
+.shimmer-line {
+    height: 15px;
+    background: #f0f0f0;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.loading-spinner i {
+    color: var(--secondary-color) !important;
+}
+
+.loading-spinner p {
+    color: var(--text-light) !important;
+    opacity: 0.7;
 }

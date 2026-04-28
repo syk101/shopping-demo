@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS products (
     is_featured BOOLEAN DEFAULT 0,
     sales_count INTEGER DEFAULT 0,
     ai_score REAL DEFAULT 0.5,
+    embedding BLOB,
     created DATE DEFAULT CURRENT_DATE
 );
 
