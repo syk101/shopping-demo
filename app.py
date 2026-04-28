@@ -4,6 +4,11 @@ import sqlite3
 import os
 import base64
 import traceback
+from PIL import Image
+from transformers import CLIPProcessor, CLIPModel
+import torch
+import numpy as np
+from io import BytesIO
 
 app = Flask(__name__, static_folder='frontend/public')
 CORS(app)
@@ -19,17 +24,37 @@ def get_db_connection():
 
 def row_to_dict(row):
     d = dict(row)
-    if 'image_data' in d and d['image_data']:
-        try:
-            d['image_data'] = base64.b64encode(d['image_data']).decode('utf-8')
-        except Exception:
-            d['image_data'] = None
+    for key, value in d.items():
+        if isinstance(value, bytes):
+            if key == 'image_data':
+                try:
+                    d[key] = base64.b64encode(value).decode('utf-8')
+                except Exception:
+                    d[key] = None
+            else:
+                # Don't send other BLOBs (like embeddings) to frontend
+                d[key] = None
     return d
 
-# --- API Routes ---
+# --- AI Search Initialization ---
+MODEL_NAME = "openai/clip-vit-base-patch32"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+print(f"Loading AI model {MODEL_NAME} on {DEVICE}...")
+try:
+    clip_model = CLIPModel.from_pretrained(MODEL_NAME).to(DEVICE)
+    clip_processor = CLIPProcessor.from_pretrained(MODEL_NAME)
+    print("AI model loaded successfully!")
+except Exception as e:
+    print(f"Error loading AI model: {e}")
+    clip_model = None
+    clip_processor = None
+
+# --- Helper Functions ---
 
 @app.route('/api/products', methods=['GET'])
 def get_all_products():
+    print("Fetching all products...")
     conn = None
     try:
         conn = get_db_connection()
@@ -49,6 +74,72 @@ def get_all_products():
             result.append(d)
         return jsonify(result)
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        if conn: conn.close()
+
+@app.route('/api/search-by-image', methods=['POST'])
+def search_by_image():
+    if not clip_model or not clip_processor:
+        return jsonify({"error": "AI model not loaded"}), 500
+    
+    conn = None
+    try:
+        data = request.json
+        image_b64 = data.get('image')
+        if not image_b64:
+            return jsonify({"error": "Image data is required"}), 400
+        
+        if ',' in image_b64:
+            image_b64 = image_b64.split(',')[1]
+        
+        image_bytes = base64.b64decode(image_b64)
+        image = Image.open(BytesIO(image_bytes)).convert("RGB")
+        
+        # Generate query embedding
+        inputs = clip_processor(images=image, return_tensors="pt").to(DEVICE)
+        with torch.no_grad():
+            outputs = clip_model.get_image_features(**inputs)
+        
+        # If outputs is not a tensor
+        if isinstance(outputs, torch.Tensor):
+            query_features = outputs
+        elif hasattr(outputs, 'image_embeds'):
+            query_features = outputs.image_embeds
+        elif hasattr(outputs, 'pooler_output'):
+            query_features = outputs.pooler_output
+        elif hasattr(outputs, 'last_hidden_state'):
+            query_features = outputs.last_hidden_state[:, 0, :]
+        else:
+            query_features = outputs[0] if isinstance(outputs, (list, tuple)) else outputs
+        
+        # Normalize
+        query_features = query_features / query_features.norm(p=2, dim=-1, keepdim=True)
+        query_embedding = query_features.cpu().numpy().flatten().astype(np.float32)
+
+        conn = get_db_connection()
+        products = conn.execute("SELECT id, name, image, price, category, embedding FROM products WHERE embedding IS NOT NULL").fetchall()
+        
+        matches = []
+        for p in products:
+            p_dict = dict(p)
+            db_embedding = np.frombuffer(p_dict['embedding'], dtype=np.float32)
+            
+            # Cosine similarity (dot product of normalized vectors)
+            similarity = np.dot(query_embedding, db_embedding)
+            
+            # Filter matches with threshold
+            if similarity > 0.6: # Confidence threshold
+                p_dict.pop('embedding') # Don't send embedding to frontend
+                p_dict['similarity'] = float(similarity)
+                matches.append(p_dict)
+        
+        # Sort by similarity
+        matches.sort(key=lambda x: x['similarity'], reverse=True)
+        
+        return jsonify(matches[:8]) # Return top 8 matches
+    except Exception as e:
+        app.logger.error(f"Search error: {traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
     finally:
         if conn: conn.close()
@@ -403,6 +494,10 @@ def delete_employee(employee_id):
 
 # --- Frontend Serving ---
 
+@app.route('/test')
+def test_route():
+    return "OK"
+
 @app.route('/')
 def index():
     return send_from_directory(app.static_folder, 'index.html')
@@ -412,4 +507,5 @@ def static_files(path):
     return send_from_directory(app.static_folder, path)
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True)
+    print("Starting Flask server on http://0.0.0.0:5000")
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
