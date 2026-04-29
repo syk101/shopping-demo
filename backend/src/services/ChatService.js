@@ -8,7 +8,8 @@ class ChatService {
         this.apiKey = process.env.GEMINI_API_KEY;
     }
 
-    async init() {
+    init() {
+        this.apiKey = process.env.GEMINI_API_KEY;
         if (!this.apiKey) {
             console.error("GEMINI_API_KEY not found in environment variables.");
             return;
@@ -18,8 +19,10 @@ class ChatService {
     }
 
     async getSalesmanResponse(userInput, productData, chatHistory = []) {
-        if (!this.model) await this.init();
-        if (!this.model) return "I'm sorry, I'm having trouble connecting to my brain right now. Can I help you with something else?";
+        if (!this.model) this.init();
+        if (!this.model || !this.apiKey || this.apiKey.includes('REPLACE_WITH_YOUR_ACTUAL_KEY')) {
+            return "I'm sorry, I'm missing my Gemini API Key. Please add a valid key to the .env file to enable my brain!";
+        }
 
         const systemPrompt = `
         You are "Shoppo", a professional, friendly, and persuasive AI Salesman for "Weary Premium Shop".
