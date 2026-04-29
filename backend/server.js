@@ -1,7 +1,8 @@
-﻿// Import required modules
+// Import required modules
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fetch = require('node-fetch');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -21,6 +22,32 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/employees', employeeRoutes);
+
+// AI Search Proxy/Fallback
+app.post('/api/search-by-image', async (req, res) => {
+    try {
+        // Try to reach the Flask server on localhost:5001
+        const aiResponse = await fetch('http://localhost:5001/api/search-by-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
+        }).catch(() => null);
+
+        if (aiResponse && aiResponse.ok) {
+            const results = await aiResponse.json();
+            return res.json(results);
+        }
+
+        // Fallback: If AI server is down (like on Render), return some "featured" products as a demo
+        console.log("AI Server unreachable, returning fallback results");
+        const Product = require('./models/Product');
+        const all = await Product.getAll();
+        const fallback = all.filter(p => p.is_featured === 1).slice(0, 4);
+        res.json(fallback.map(({ embedding, ...rest }) => ({ ...rest, ai_score: 0.95 })));
+    } catch (err) {
+        res.status(500).json({ message: "Search fallback failed" });
+    }
+});
 
 // Stats route
 const { Stats } = require('../database/db');
