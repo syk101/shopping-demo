@@ -151,29 +151,29 @@ app.post('/api/payment', async (req, res) => {
     res.json({ success: true, transaction_id });
 });
 
-app.post('/api/ai/tryon', async (req, res) => {
-    const { image, product_id } = req.body;
-    try {
-        // 1. Get product image
-        const [product] = await db.query("SELECT image FROM products WHERE id = ?", [product_id]);
-        if (!product) throw new Error("Product not found");
+// Dashboard CRUD Endpoints
+app.get('/api/orders', async (req, res) => {
+    const orders = await db.query("SELECT * FROM orders");
+    res.json(orders);
+});
 
-        // 2. Perform segmentation using HF API
-        // This is a simplified version: in a real scenario we'd send the image buffer
-        // For now, we simulate the "WOW" effect by returning a processed-looking URL or base64
-        // To keep it lightweight and fast, we'll return a mock "processed" result
-        // but the architecture is ready for full HF integration.
-        
-        // Mock result: Combine user image and product overlay (Visual simulation)
-        // In a real implementation, we'd use Jimp to overlay the product image based on ClipSeg mask
-        res.json({ 
-            success: true, 
-            result_url: product.image, // Placeholder for processed result
-            message: "Try-on visualization complete" 
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+app.get('/api/inventory', async (req, res) => {
+    const inv = await db.query("SELECT p.id as product_id, p.name, p.stock_quantity, 10 as min_stock_level FROM products p");
+    res.json(inv);
+});
+
+app.get('/api/employees', async (req, res) => {
+    const emps = await db.query("SELECT * FROM employees");
+    res.json(emps);
+});
+
+app.get('/api/stats/trends', async (req, res) => {
+    // Return mock trend data for the charts
+    res.json({
+        revenue: [1200, 1500, 1100, 1800, 2200, 1900, 2500],
+        orders: [5, 8, 4, 12, 15, 10, 18],
+        stock: [100, 95, 110, 105, 120, 115, 120]
+    });
 });
 
 app.listen(5000, () => console.log("Refactored Server on 5000"));
