@@ -36,6 +36,35 @@ class AIService {
         if (!res.ok) throw new Error(`HF API Error: ${res.statusText}`);
         return await res.json();
     }
+
+    async tryOn(avatarBase64, productImageUrl) {
+        try {
+            const avatarBuffer = Buffer.from(avatarBase64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+            const avatar = await Jimp.read(avatarBuffer);
+            
+            // In a real app, productImageUrl would be a relative path or URL
+            // If it's relative, we need the full path
+            const productPath = path.isAbsolute(productImageUrl) ? productImageUrl : path.join(__dirname, '../../../frontend/public', productImageUrl);
+            const product = await Jimp.read(productPath);
+
+            // Simple "AI" Simulation: Overlay product on avatar center-down
+            product.resize(avatar.getWidth() * 0.5, Jimp.AUTO);
+            const x = (avatar.getWidth() - product.getWidth()) / 2;
+            const y = avatar.getHeight() * 0.35; // Position near chest area
+
+            avatar.composite(product, x, y, {
+                mode: Jimp.BLEND_SOURCE_OVER,
+                opacitySource: 0.9
+            });
+
+            const resultBase64 = await avatar.getBase64Async(Jimp.MIME_JPEG);
+            return { image: resultBase64 };
+        } catch (err) {
+            console.error("AI Try-On Simulation failed:", err);
+            // Fallback: return the original avatar if product loading fails
+            return { image: avatarBase64 };
+        }
+    }
 }
 
 module.exports = { 

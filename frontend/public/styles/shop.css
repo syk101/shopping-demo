@@ -1447,6 +1447,124 @@ body {
     border-radius: 8px;
 }
 
+/* Premium Product Cards for Home Page */
+.products-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.modern-card {
+    position: relative;
+    background: #fff;
+    transition: transform 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.modern-card:hover {
+    transform: translateY(-5px);
+}
+
+.modern-card-image-wrap {
+    position: relative;
+    overflow: hidden;
+    background: #f4f4f4;
+    aspect-ratio: 3/4;
+}
+
+.modern-card-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.modern-card:hover .modern-card-image-wrap img {
+    transform: scale(1.05);
+}
+
+/* Actions Overlay */
+.card-actions-overlay {
+    position: absolute;
+    bottom: -80px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.modern-card:hover .card-actions-overlay {
+    bottom: 0;
+}
+
+.quick-add-btn, .tryon-btn-category {
+    width: 100%;
+    border: none;
+    padding: 14px 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.quick-add-btn {
+    background: #ffffff;
+    color: #111;
+    border-bottom: 1px solid #eee;
+}
+
+.tryon-btn-category {
+    background: #7c3aed;
+    color: #fff;
+}
+
+.quick-add-btn:hover {
+    background: #111;
+    color: #fff;
+}
+
+.tryon-btn-category:hover {
+    background: #6d28d9;
+    letter-spacing: 2.5px;
+}
+
+.modern-card-info {
+    padding: 20px;
+}
+
+.modern-card-title {
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.modern-card-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.modern-card-rating {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #fbbf24;
+}
+
 /* Try-On Button in Product Card */
 .tryon-actions {
     display: flex;
@@ -1473,4 +1591,4 @@ body {
         width: 100%;
         right: -100%;
     }
-}
+}

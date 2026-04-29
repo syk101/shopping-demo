@@ -38,6 +38,56 @@ app.post('/api/search', async (req, res) => {
     res.json(results);
 });
 
+app.post('/api/ai/avatar', async (req, res) => {
+    const { image } = req.body;
+    try {
+        const result = await db.run("INSERT INTO user_avatar (user_image_url) VALUES (?)", [image]);
+        res.json({ success: true, avatar_id: result.id });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/ai/tryon', async (req, res) => {
+    const { avatar_id, product_id } = req.body;
+    try {
+        const [avatar] = await db.query("SELECT user_image_url FROM user_avatar WHERE id = ?", [avatar_id]);
+        const [product] = await db.query("SELECT image FROM products WHERE id = ?", [product_id]);
+
+        if (!avatar || !product) throw new Error("Avatar or product not found");
+
+        const result = await ai.tryOn(avatar.user_image_url, product.image);
+        
+        // Save to history
+        await db.run("INSERT INTO tryon_history (avatar_id, product_id, result_image_url) VALUES (?, ?, ?)",
+            [avatar_id, product_id, result.image]);
+
+        res.json({ image: result.image });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/search-by-image', async (req, res) => {
+    const { image, vector } = req.body;
+    const all = await db.query("SELECT * FROM products");
+    
+    try {
+        let results;
+        if (vector) {
+            // Browser-side AI already generated vector
+            searcher.setStrategy(new AISearchStrategy());
+            results = await searcher.search(vector, all);
+        } else {
+            // Server-side AI processing
+            results = await vision.search(image, all);
+        }
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.patch('/api/stock/:id', async (req, res) => {
     const { id } = req.params;
     const { stock } = req.body;

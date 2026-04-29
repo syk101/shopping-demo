@@ -70,27 +70,24 @@ function renderProductGrid(gridId, products) {
         for (let i = 0; i < emptyStars; i++) starsHtml += '<i class="far fa-star"></i>';
 
         return `
-        <div class="product-card">
-            <div class="product-image">
-                <img src="${imageUrl}" alt="${product.name}" loading="lazy">
-                ${product.stock_quantity <= 5 && product.stock_quantity > 0 ? '<div class="product-badge">LOW STOCK</div>' : ''}
-                ${product.stock_quantity === 0 ? '<div class="product-badge sale">OUT OF STOCK</div>' : ''}
-            </div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p class="product-description">${product.description || 'Premium quality apparel crafted for comfort and style.'}</p>
-                <div class="product-price">$${parseFloat(product.price).toFixed(2)}</div>
-                <div class="product-rating">
-                    ${starsHtml}
-                    <span>(${reviews})</span>
+        <div class="modern-card">
+            <div class="modern-card-image-wrap">
+                <img src="${imageUrl}" loading="lazy" alt="${product.name}">
+                <div class="card-actions-overlay">
+                    <button class="quick-add-btn" onclick="addToCart(${product.id}, event)">
+                        Quick Add <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="tryon-btn-category" onclick="openTryOn(${product.id}, event)">
+                        <i class="fas fa-magic"></i> Try On
+                    </button>
                 </div>
-                <div class="tryon-actions">
-                    <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">
-                        ADD TO CART
-                    </button>
-                    <button class="btn-tryon" onclick="openTryOn(${product.id})">
-                        <i class="fas fa-magic"></i> TRY ON
-                    </button>
+            </div>
+            <div class="modern-card-info">
+                <h3 class="modern-card-title">${product.name}</h3>
+                <div class="modern-card-price">$${parseFloat(product.price).toFixed(2)}</div>
+                <div class="modern-card-rating">
+                    ${starsHtml}
+                    <span style="color: #999; margin-left: 4px;">(${reviews})</span>
                 </div>
             </div>
         </div>
