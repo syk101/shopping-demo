@@ -57,15 +57,19 @@ class TryOnSystem {
             const product = window.currentProducts?.find(p => p.id === this.selectedProductId);
             const category = product?.category || 'clothing';
 
-            // 2. Initialize AR and Get Anchors
-            await window.tryOnAR.init();
-            const tempImg = new Image();
-            tempImg.src = this.userImage;
-            await new Promise(r => tempImg.onload = r);
-            
-            const anchors = await window.tryOnAR.getAnchors(tempImg, category);
+            let anchors = null;
+            try {
+                // 2. Initialize AR and Get Anchors
+                await window.tryOnAR.init();
+                const tempImg = new Image();
+                tempImg.src = this.userImage;
+                await new Promise(r => tempImg.onload = r);
+                anchors = await window.tryOnAR.getAnchors(tempImg, category);
+            } catch (arErr) {
+                console.warn('AR Alignment failed, falling back to standard AI try-on:', arErr);
+            }
 
-            // 3. Call Enhanced Backend
+            // 3. Call Backend (with anchors if available)
             const res = await fetch('/api/ai/tryon', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

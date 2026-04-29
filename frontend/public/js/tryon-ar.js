@@ -25,11 +25,11 @@ class TryOnAR {
             'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js'
         ]);
 
-        const vision = await FilesetResolver.forVisionTasks(
+        const vision = await tasksVision.FilesetResolver.forVisionTasks(
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
         );
 
-        this.poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+        this.poseLandmarker = await tasksVision.PoseLandmarker.createFromOptions(vision, {
             baseOptions: {
                 modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task`,
                 delegate: "GPU"
