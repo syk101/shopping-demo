@@ -188,19 +188,17 @@ function filterOrders(searchTerm) {
     }
 
     tbody.innerHTML = filteredOrders.map(order => {
-        const product = currentProducts.find(p => p.id === order.product_id);
         return `
             <tr>
                 <td>${order.id}</td>
                 <td>
                     <div>${order.customer_name}</div>
-                    <div class="text-muted">${order.customer_email}</div>
+                    <div class="text-muted">${order.phone}</div>
                 </td>
-                <td>${product?.name || 'Unknown Product'}</td>
-                <td>${order.quantity}</td>
-                <td>$${parseFloat(order.total_amount || 0).toFixed(2)}</td>
+                <td>${order.products_summary || 'No items'}</td>
+                <td>$${parseFloat(order.total_price || 0).toFixed(2)}</td>
                 <td>
-                    <span class="status-badge ${order.status}">
+                    <span class="status-badge status-${order.status}">
                         ${order.status}
                     </span>
                 </td>
@@ -541,12 +539,11 @@ function renderRecentOrders() {
     }
 
     container.innerHTML = recentOrders.map(order => {
-        const product = currentProducts.find(p => p.id === order.product_id && p.table_name === order.product_category);
         return `
             <div class="activity-item card-hover">
                 <div class="activity-details">
                     <h4>Order #${order.id} - ${order.customer_name}</h4>
-                    <p>${product?.name || 'Unknown Product'} × ${order.quantity}</p>
+                    <p>${order.products_summary || 'No items'}</p>
                     <small class="text-muted">${new Date(order.created_at).toLocaleString()}</small>
                 </div>
                 <span class="activity-status status-${order.status}">${order.status}</span>

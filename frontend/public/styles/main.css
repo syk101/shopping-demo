@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     /* Color Palette - Slate Theme */
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
@@ -652,6 +652,11 @@ header h1 {
 .status-processing {
     background: #dbeafe;
     color: #1e40af;
+}
+
+.status-paid {
+    background: #dcfce7;
+    color: #166534;
 }
 
 .btn:disabled {

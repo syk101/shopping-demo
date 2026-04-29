@@ -153,7 +153,13 @@ app.post('/api/payment', async (req, res) => {
 
 // Dashboard CRUD Endpoints
 app.get('/api/orders', async (req, res) => {
-    const orders = await db.query("SELECT * FROM orders");
+    const orders = await db.query(`
+        SELECT o.*, GROUP_CONCAT(p.name || ' (x' || oi.quantity || ')') as products_summary
+        FROM orders o
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        LEFT JOIN products p ON oi.product_id = p.id
+        GROUP BY o.id
+    `);
     res.json(orders);
 });
 
