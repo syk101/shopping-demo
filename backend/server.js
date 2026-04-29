@@ -26,7 +26,7 @@ app.get('/test', (req, res) => res.send('OK'));
 
 // Optimized Routes
 app.get('/api/products', async (req, res) => {
-    const products = await db.query("SELECT * FROM products");
+    const products = await db.query("SELECT *, stock as stock_quantity FROM products");
     res.json(products);
 });
 
@@ -167,7 +167,7 @@ app.get('/api/orders', async (req, res) => {
 });
 
 app.get('/api/inventory', async (req, res) => {
-    const inv = await db.query("SELECT p.id as product_id, p.name, p.stock_quantity, 10 as min_stock_level FROM products p");
+    const inv = await db.query("SELECT id as product_id, name, stock as stock_quantity, 10 as min_stock_level FROM products");
     res.json(inv);
 });
 
