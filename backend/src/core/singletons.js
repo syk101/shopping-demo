@@ -37,12 +37,12 @@ class AIService {
         return await res.json();
     }
 
-    async tryOn(avatarBase64, productImageUrl) {
+    async tryOn(avatarBase64, productImageUrl, anchors = null) {
         try {
             const avatarBuffer = Buffer.from(avatarBase64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
             const avatar = await Jimp.read(avatarBuffer);
             
-            // 1. Stylization: Give it a "Vector/Graphic" look like Snapchat's Bitmoji
+            // 1. Stylization: "Snapchat Filter" Look
             avatar.posterize(8).contrast(0.15).brightness(0.05);
 
             // 2. Load Product
@@ -54,15 +54,26 @@ class AIService {
                 product = await Jimp.read(productImageUrl);
             }
 
-            // 3. Smart Scaling & Positioning
+            // 3. Precision Alignment using MediaPipe Anchors
             const avatarWidth = avatar.getWidth();
             const avatarHeight = avatar.getHeight();
-            product.resize(avatarWidth * 0.65, Jimp.AUTO);
+            
+            let x, y, pWidth;
 
-            const x = (avatarWidth - product.getWidth()) / 2;
-            const y = avatarHeight * 0.3; // Higher position for better fit
+            if (anchors && anchors.center) {
+                // Precise alignment from MediaPipe
+                pWidth = anchors.width * avatarWidth;
+                product.resize(pWidth, Jimp.AUTO);
+                x = (anchors.center.x * avatarWidth) - (product.getWidth() / 2);
+                y = (anchors.center.y * avatarHeight) - (product.getHeight() / 2);
+            } else {
+                // Fallback to center-torso
+                product.resize(avatarWidth * 0.65, Jimp.AUTO);
+                x = (avatarWidth - product.getWidth()) / 2;
+                y = avatarHeight * 0.3;
+            }
 
-            // 4. Add subtle shadow for depth
+            // 4. Composition with AR depth
             const shadow = product.clone().brightness(-1).blur(3).opacity(0.2);
             avatar.composite(shadow, x + 3, y + 3);
             

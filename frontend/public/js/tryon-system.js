@@ -12,6 +12,7 @@ class TryOnSystem {
 
     setupEventListeners() {
         this.uploadInput?.addEventListener('change', (e) => this.handleUpload(e));
+        document.getElementById('open-camera')?.addEventListener('click', () => this.startCamera());
         document.getElementById('close-tryon')?.addEventListener('click', () => this.toggleModal(false));
         document.getElementById('start-tryon')?.addEventListener('click', () => this.executeTryOn());
     }
@@ -44,60 +45,82 @@ class TryOnSystem {
 
     async executeTryOn() {
         if (!this.userImage || !this.selectedProductId) {
-            window.showNotification('Please upload a photo first', 'error');
+            window.showNotification('Please upload or capture a photo first', 'error');
             return;
         }
 
-        const btn = document.getElementById('start-tryon');
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing AI...';
-        btn.disabled = true;
+        const container = this.previewContainer;
+        container.innerHTML += `<div class="ar-processing"><div class="ar-scan-line"></div><i class="fas fa-microchip fa-spin fa-3x mb-3"></i><h3>AI MAPPING BODY...</h3></div>`;
 
         try {
+            // 1. Get Product Info
+            const product = window.currentProducts?.find(p => p.id === this.selectedProductId);
+            const category = product?.category || 'clothing';
+
+            // 2. Initialize AR and Get Anchors
+            await window.tryOnAR.init();
+            const tempImg = new Image();
+            tempImg.src = this.userImage;
+            await new Promise(r => tempImg.onload = r);
+            
+            const anchors = await window.tryOnAR.getAnchors(tempImg, category);
+
+            // 3. Call Enhanced Backend
             const res = await fetch('/api/ai/tryon', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     image: this.userImage, 
-                    product_id: this.selectedProductId 
+                    product_id: this.selectedProductId,
+                    anchors: anchors
                 })
             });
             const data = await res.json();
             
             if (data.success) {
-                this.showResult(data.result_url);
-                window.showNotification('AI Visualization Ready!', 'success');
+                // 4. Render Before/After Slider
+                window.tryOnAR.renderSlider(container, this.userImage, data.result_url);
+                window.showNotification('AR Stylized Successfully!', 'success');
             } else {
                 throw new Error(data.error);
             }
         } catch (err) {
-            console.error('Try-on failed:', err);
-            window.showNotification('AI Processing failed. Try again.', 'error');
-        } finally {
-            btn.innerHTML = originalHTML;
-            btn.disabled = false;
+            console.error('AR Try-on failed:', err);
+            window.showNotification('AI Alignment failed. Try a clearer photo.', 'error');
+            this.showPreview(this.userImage); // Revert to preview
         }
     }
 
-    showResult(resultUrl) {
-        if (this.previewContainer) {
-            this.previewContainer.innerHTML = `
-                <div class="tryon-result snapchat-style">
-                    <div class="result-badge">AI STYLIZED</div>
-                    <img src="${resultUrl}" alt="Try-on Result" class="avatar-styled">
-                    <div class="result-actions">
-                        <button class="btn-snap" onclick="window.tryOnSystem.downloadResult('${resultUrl}')">
-                            <i class="fas fa-download"></i> SAVE SNAP
-                        </button>
-                        <button class="btn-snap secondary" onclick="window.tryOnSystem.toggleModal(false)">
-                            <i class="fas fa-redo"></i> TRY ANOTHER
-                        </button>
-                    </div>
+    async startCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            video.play();
+            
+            this.previewContainer.innerHTML = '';
+            this.previewContainer.appendChild(video);
+            this.previewContainer.innerHTML += `
+                <div class="snap-ui">
+                    <button class="snap-btn" id="take-snap"></button>
+                    <p class="text-white">Align your body in the frame</p>
                 </div>
             `;
+            
+            document.getElementById('take-snap').onclick = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                this.userImage = canvas.toDataURL('image/jpeg');
+                stream.getTracks().forEach(t => t.stop());
+                this.showPreview(this.userImage);
+            };
+        } catch (err) {
+            window.showNotification('Camera access denied', 'error');
         }
     }
-
+}
     downloadResult(url) {
         const link = document.createElement('a');
         link.href = url;

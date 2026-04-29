@@ -1592,3 +1592,16 @@ body {
         right: -100%;
     }
 }
+/* Advanced Try-On AR Styles */
+.ba-slider { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+.ba-before, .ba-after { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.ba-after img, .ba-before img { width: 100%; height: 100%; object-fit: cover; }
+.ba-before { width: 50%; overflow: hidden; border-right: 2px solid #fff; z-index: 2; }
+.ba-handle { position: absolute; top: 0; left: 50%; width: 40px; height: 40px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%); top: 50%; z-index: 3; cursor: ew-resize; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+.ba-handle::before { content: '?'; color: #000; font-weight: 800; }
+.snap-ui { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; z-index: 10; }
+.snap-btn { width: 70px; height: 70px; background: rgba(255,255,255,0.2); border: 5px solid #fff; border-radius: 50%; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.snap-btn:active { transform: scale(0.9); background: #fff; }
+.ar-processing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; color: #fff; font-family: 'Outfit', sans-serif; }
+.ar-scan-line { width: 100%; height: 2px; background: #fffc00; position: absolute; top: 0; animation: scan 2s linear infinite; box-shadow: 0 0 15px #fffc00; }
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }

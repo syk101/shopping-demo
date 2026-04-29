@@ -374,12 +374,12 @@
             </div>
             <div class="tryon-body">
                 <div class="upload-section">
-                    <p>Upload your photo to see how it looks!</p>
+                    <p>Upload or capture your photo to see how it looks!</p>
                     <input type="file" id="avatar-upload" accept="image/*" hidden>
-                    <label for="avatar-upload" class="upload-label">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Select Profile Photo</span>
-                    </label>
+                    <div class="tryon-actions">
+                        <label for="avatar-upload" class="upload-label"><i class="fas fa-image"></i><span>Upload Photo</span></label>
+                        <button id="open-camera" class="btn btn-secondary upload-label"><i class="fas fa-camera"></i><span>Open Camera</span></button>
+                    </div>
                 </div>
                 <div id="tryon-preview" class="tryon-preview">
                     <!-- Image preview -->
@@ -395,6 +395,7 @@
     <script src="js/camera-search.js?v=2"></script>
     <script src="js/shop.js?v=2"></script>
     <script src="js/cart-system.js?v=2"></script>
+    <script src="js/tryon-ar.js?v=2"></script>
     <script src="js/tryon-system.js?v=2"></script>
 </body>
 

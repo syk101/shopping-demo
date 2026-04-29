@@ -63,7 +63,8 @@ app.post('/api/ai/tryon', async (req, res) => {
         const [product] = await db.query("SELECT image FROM products WHERE id = ?", [product_id]);
         if (!userImage || !product) throw new Error("User image or product not found");
 
-        const result = await ai.tryOn(userImage, product.image);
+        const { anchors } = req.body;
+        const result = await ai.tryOn(userImage, product.image, anchors);
         
         res.json({ 
             success: true, 

@@ -211,7 +211,10 @@
             <div class="tryon-body">
                 <div class="upload-section">
                     <input type="file" id="avatar-upload" accept="image/*" hidden>
-                    <label for="avatar-upload" class="upload-label"><i class="fas fa-cloud-upload-alt"></i><span>Select Profile Photo</span></label>
+                    <div class="tryon-actions">
+                        <label for="avatar-upload" class="upload-label"><i class="fas fa-image"></i><span>Upload Photo</span></label>
+                        <button id="open-camera" class="btn btn-secondary upload-label"><i class="fas fa-camera"></i><span>Open Camera</span></button>
+                    </div>
                 </div>
                 <div id="tryon-preview" class="tryon-preview"></div>
                 <button id="start-tryon" class="btn btn-secondary">GENERATE AI PREVIEW</button>
@@ -222,6 +225,7 @@
     <script src="js/config.js"></script>
     <script src="js/camera-search.js"></script>
     <script src="js/cart-system.js"></script>
+    <script src="js/tryon-ar.js"></script>
     <script src="js/tryon-system.js"></script>
     <script src="js/category.js"></script>
 </body>
