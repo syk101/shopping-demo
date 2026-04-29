@@ -4,7 +4,7 @@ const path = require('path');
 class Database {
     constructor() {
         if (Database.instance) return Database.instance;
-        this.db = new sqlite3.Database(path.resolve(__dirname, '../../database/shop.db'));
+        this.db = new sqlite3.Database(path.resolve(__dirname, '../../../database/shop.db'));
         Database.instance = this;
     }
     query(sql, params = []) {
