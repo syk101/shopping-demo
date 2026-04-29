@@ -21,6 +21,9 @@ const searcher = new SearchContext();
 const stockManager = new StockSubject();
 stockManager.subscribe(stockNotifier);
 
+// Health Check
+app.get('/test', (req, res) => res.send('OK'));
+
 // Optimized Routes
 app.get('/api/products', async (req, res) => {
     const products = await db.query("SELECT * FROM products");
