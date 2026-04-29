@@ -16,7 +16,14 @@ function getImageUrl(name, category, id) {
   const n = name.toLowerCase();
   const c = category ? category.toLowerCase() : '';
   let keywords = 'fashion,apparel';
-  if (c.includes('men_premium')) {
+  if (c === 'men_premium') {
+    const dir = path.join(__dirname, '../frontend/public/premium wear');
+    if (fs.existsSync(dir)) {
+      const images = fs.readdirSync(dir).filter(f => f.match(/\.(jpg|jpeg|png|webp)$/i));
+      if (images.length > 0) {
+        return `premium wear/${images[(id - 1) % images.length]}`;
+      }
+    }
     if (n.includes('suit')) keywords = 'mens,tailored,suit';
     else if (n.includes('blazer')) keywords = 'mens,blazer,luxury';
     else if (n.includes('watch')) keywords = 'luxury,watch,mens';
@@ -28,19 +35,14 @@ function getImageUrl(name, category, id) {
     else if (n.includes('cashmere') || n.includes('knitwear')) keywords = 'mens,cashmere,sweater';
     else if (n.includes('briefcase')) keywords = 'leather,briefcase,mens';
     else keywords = 'mens,premium,fashion';
-  } else if (c.includes('men_casual')) {
-    if (n.includes('t-shirt')) keywords = 'mens,tshirt,style';
-    else if (n.includes('jeans')) keywords = 'mens,denim,jeans';
-    else if (n.includes('sneakers')) keywords = 'mens,sneakers,urban';
-    else if (n.includes('hoodie')) keywords = 'mens,hoodie,streetwear';
-    else if (n.includes('polo')) keywords = 'mens,polo,shirt';
-    else if (n.includes('cargo')) keywords = 'mens,cargo,pants';
-    else if (n.includes('denim') || n.includes('jacket')) keywords = 'mens,denim,jacket';
-    else if (n.includes('cap')) keywords = 'mens,baseball,cap';
-    else if (n.includes('shorts')) keywords = 'mens,chino,shorts';
-    else if (n.includes('flannel')) keywords = 'mens,flannel,shirt';
-    else keywords = 'mens,casual,apparel';
-  } else if (c.includes('women_premium')) {
+  } else if (c === 'women_premium') {
+    const dir = path.join(__dirname, '../frontend/public/evening_wear');
+    if (fs.existsSync(dir)) {
+      const images = fs.readdirSync(dir).filter(f => f.match(/\.(jpg|jpeg|png|webp)$/i));
+      if (images.length > 0) {
+        return `evening_wear/${images[(id - 1) % images.length]}`;
+      }
+    }
     if (n.includes('gown') || n.includes('evening')) keywords = 'womens,evening,gown';
     else if (n.includes('cocktail') || n.includes('dress')) keywords = 'womens,luxury,dress';
     else if (n.includes('handbag')) keywords = 'luxury,handbag,womens';
@@ -51,7 +53,14 @@ function getImageUrl(name, category, id) {
     else if (n.includes('coat')) keywords = 'womens,cashmere,coat';
     else if (n.includes('blazer')) keywords = 'womens,velvet,blazer';
     else keywords = 'womens,couture,fashion';
-  } else if (c.includes('women_casual')) {
+  } else if (c === 'women_casual') {
+    const dir = path.join(__dirname, '../frontend/public/Casual_wear');
+    if (fs.existsSync(dir)) {
+      const images = fs.readdirSync(dir).filter(f => f.match(/\.(jpg|jpeg|png|webp)$/i));
+      if (images.length > 0) {
+        return `Casual_wear/${images[(id - 1) % images.length]}`;
+      }
+    }
     if (n.includes('sundress') || n.includes('floral')) keywords = 'womens,floral,dress';
     else if (n.includes('yoga') || n.includes('leggings')) keywords = 'womens,yoga,outfit';
     else if (n.includes('cardigan') || n.includes('knit')) keywords = 'womens,cardigan,style';
@@ -63,7 +72,26 @@ function getImageUrl(name, category, id) {
     else if (n.includes('linen') || n.includes('pants')) keywords = 'womens,linen,pants';
     else if (n.includes('tee')) keywords = 'womens,casual,top';
     else keywords = 'womens,casual,wear';
-  } else if (c.includes('kids_premium')) {
+  } else if (c === 'men_casual') {
+    const dir = path.join(__dirname, '../frontend/public/casual wear');
+    if (fs.existsSync(dir)) {
+      const images = fs.readdirSync(dir).filter(f => f.match(/\.(jpg|jpeg|png|webp)$/i));
+      if (images.length > 0) {
+        return `casual wear/${images[(id - 1) % images.length]}`;
+      }
+    }
+    if (n.includes('t-shirt')) keywords = 'mens,tshirt,style';
+    else if (n.includes('jeans')) keywords = 'mens,denim,jeans';
+    else if (n.includes('sneakers')) keywords = 'mens,sneakers,urban';
+    else if (n.includes('hoodie')) keywords = 'mens,hoodie,streetwear';
+    else if (n.includes('polo')) keywords = 'mens,polo,shirt';
+    else if (n.includes('cargo')) keywords = 'mens,cargo,pants';
+    else if (n.includes('denim') || n.includes('jacket')) keywords = 'mens,denim,jacket';
+    else if (n.includes('cap')) keywords = 'mens,baseball,cap';
+    else if (n.includes('shorts')) keywords = 'mens,chino,shorts';
+    else if (n.includes('flannel')) keywords = 'mens,flannel,shirt';
+    else keywords = 'mens,casual,apparel';
+  } else if (c === 'kids_premium') {
     const images = fs.readdirSync(path.join(__dirname, '../frontend/public/kid_premium'))
       .filter(f => f.endsWith('.jpg') || f.endsWith('.png') || f.endsWith('.webp'));
     if (images.length > 0) {
@@ -82,7 +110,7 @@ function getImageUrl(name, category, id) {
     else if (n.includes('satin') || n.includes('ribbon')) keywords = 'kids,satin,dress';
     else if (n.includes('booties') || n.includes('baby')) keywords = 'kids,baby,shoes';
     else keywords = 'kids,elegant,clothing';
-  } else if (c.includes('kids_casual')) {
+  } else if (c === 'kids_casual') {
     const images = fs.readdirSync(path.join(__dirname, '../frontend/public/kid_casual'))
       .filter(f => f.endsWith('.jpg') || f.endsWith('.png') || f.endsWith('.webp'));
     if (images.length > 0) {

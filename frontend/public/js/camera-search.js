@@ -143,7 +143,12 @@ function initCameraSearch() {
         noResults.style.display = 'none';
 
         try {
-            const response = await fetch('/api/search-by-image', {
+            // Use port 5001 for Flask backend in local dev, otherwise relative path
+            const aiUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:5001/api/search-by-image'
+                : '/api/search-by-image';
+
+            const response = await fetch(aiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ image: base64Image })
