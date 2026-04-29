@@ -42,26 +42,49 @@ class AIService {
             const avatarBuffer = Buffer.from(avatarBase64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
             const avatar = await Jimp.read(avatarBuffer);
             
-            // In a real app, productImageUrl would be a relative path or URL
-            // If it's relative, we need the full path
+            // 1. Stylization: Give it a "Vector/Graphic" look like Snapchat's Bitmoji
+            avatar.posterize(8).contrast(0.15).brightness(0.05);
+
+            // 2. Load Product
             const productPath = path.isAbsolute(productImageUrl) ? productImageUrl : path.join(__dirname, '../../../frontend/public', productImageUrl);
-            const product = await Jimp.read(productPath);
+            let product;
+            try {
+                product = await Jimp.read(productPath);
+            } catch (e) {
+                product = await Jimp.read(productImageUrl);
+            }
 
-            // Simple "AI" Simulation: Overlay product on avatar center-down
-            product.resize(avatar.getWidth() * 0.5, Jimp.AUTO);
-            const x = (avatar.getWidth() - product.getWidth()) / 2;
-            const y = avatar.getHeight() * 0.35; // Position near chest area
+            // 3. Smart Scaling & Positioning
+            const avatarWidth = avatar.getWidth();
+            const avatarHeight = avatar.getHeight();
+            product.resize(avatarWidth * 0.65, Jimp.AUTO);
 
+            const x = (avatarWidth - product.getWidth()) / 2;
+            const y = avatarHeight * 0.3; // Higher position for better fit
+
+            // 4. Add subtle shadow for depth
+            const shadow = product.clone().brightness(-1).blur(3).opacity(0.2);
+            avatar.composite(shadow, x + 3, y + 3);
+            
             avatar.composite(product, x, y, {
                 mode: Jimp.BLEND_SOURCE_OVER,
-                opacitySource: 0.9
+                opacitySource: 1.0
+            });
+
+            // 5. Add "Snapchat" Branding Border
+            const borderSize = Math.floor(avatarWidth * 0.015);
+            avatar.scan(0, 0, avatarWidth, avatarHeight, function(x, y, idx) {
+                if (x < borderSize || x > avatarWidth - borderSize || y < borderSize || y > avatarHeight - borderSize) {
+                    this.bitmap.data[idx] = 255; 
+                    this.bitmap.data[idx+1] = 252; 
+                    this.bitmap.data[idx+2] = 0;   
+                }
             });
 
             const resultBase64 = await avatar.getBase64Async(Jimp.MIME_JPEG);
             return { image: resultBase64 };
         } catch (err) {
             console.error("AI Try-On Simulation failed:", err);
-            // Fallback: return the original avatar if product loading fails
             return { image: avatarBase64 };
         }
     }

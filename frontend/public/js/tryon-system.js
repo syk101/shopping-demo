@@ -82,13 +82,27 @@ class TryOnSystem {
     showResult(resultUrl) {
         if (this.previewContainer) {
             this.previewContainer.innerHTML = `
-                <div class="tryon-result">
-                    <h3>AI Visualization</h3>
-                    <img src="${resultUrl}" alt="Try-on Result">
-                    <p>Visualizing product on your avatar...</p>
+                <div class="tryon-result snapchat-style">
+                    <div class="result-badge">AI STYLIZED</div>
+                    <img src="${resultUrl}" alt="Try-on Result" class="avatar-styled">
+                    <div class="result-actions">
+                        <button class="btn-snap" onclick="window.tryOnSystem.downloadResult('${resultUrl}')">
+                            <i class="fas fa-download"></i> SAVE SNAP
+                        </button>
+                        <button class="btn-snap secondary" onclick="window.tryOnSystem.toggleModal(false)">
+                            <i class="fas fa-redo"></i> TRY ANOTHER
+                        </button>
+                    </div>
                 </div>
             `;
         }
+    }
+
+    downloadResult(url) {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'my-ai-avatar.jpg';
+        link.click();
     }
 }
 

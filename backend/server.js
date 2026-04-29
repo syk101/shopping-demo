@@ -52,20 +52,24 @@ app.post('/api/ai/avatar', async (req, res) => {
 });
 
 app.post('/api/ai/tryon', async (req, res) => {
-    const { avatar_id, product_id } = req.body;
+    const { image, avatar_id, product_id } = req.body;
     try {
-        const [avatar] = await db.query("SELECT user_image_url FROM user_avatar WHERE id = ?", [avatar_id]);
+        let userImage = image;
+        if (avatar_id && !userImage) {
+            const [avatar] = await db.query("SELECT user_image_url FROM user_avatar WHERE id = ?", [avatar_id]);
+            if (avatar) userImage = avatar.user_image_url;
+        }
+
         const [product] = await db.query("SELECT image FROM products WHERE id = ?", [product_id]);
+        if (!userImage || !product) throw new Error("User image or product not found");
 
-        if (!avatar || !product) throw new Error("Avatar or product not found");
-
-        const result = await ai.tryOn(avatar.user_image_url, product.image);
+        const result = await ai.tryOn(userImage, product.image);
         
-        // Save to history
-        await db.run("INSERT INTO tryon_history (avatar_id, product_id, result_image_url) VALUES (?, ?, ?)",
-            [avatar_id, product_id, result.image]);
-
-        res.json({ image: result.image });
+        res.json({ 
+            success: true, 
+            result_url: result.image,
+            message: "AI Avatar stylized successfully"
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
