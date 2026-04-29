@@ -130,11 +130,7 @@ function renderGrid(gridId, products) {
     }).join('');
 }
 
-// Remove old addToCart as it's handled by cart-system.js
-window.openTryOn = function(productId, event) {
-    if (event) event.stopPropagation();
-    if (window.tryOnSystem) window.tryOnSystem.toggleModal(true, productId);
-};
+// Try-On is handled globally by tryon-system.js
 
 /**
  * INTERACTIVE FEATURES

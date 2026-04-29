@@ -130,4 +130,7 @@ class TryOnSystem {
 }
 
 window.tryOnSystem = new TryOnSystem();
-window.openTryOn = (productId) => window.tryOnSystem.toggleModal(true, productId);
+window.openTryOn = (productId, event) => {
+    if (event) event.stopPropagation();
+    window.tryOnSystem.toggleModal(true, productId);
+};
