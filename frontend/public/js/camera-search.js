@@ -136,6 +136,23 @@ function initCameraSearch() {
         }
     });
 
+    let extractor = null;
+    let processor = null;
+
+    async function getExtractor() {
+        if (!extractor && window.AI_VISION_MODEL && window.AI_PROCESSOR) {
+            console.log("Loading browser-side AI model (CLIP)...");
+            try {
+                processor = await window.AI_PROCESSOR.from_pretrained('Xenova/clip-vit-base-patch32');
+                extractor = await window.AI_VISION_MODEL.from_pretrained('Xenova/clip-vit-base-patch32');
+                console.log("AI model loaded successfully.");
+            } catch (err) {
+                console.error("Failed to load AI model:", err);
+            }
+        }
+        return extractor;
+    }
+
     async function performAISearch(base64Image) {
         cameraView.style.display = 'none';
         loading.style.display = 'block';
@@ -143,15 +160,37 @@ function initCameraSearch() {
         noResults.style.display = 'none';
 
         try {
-            // Use port 5001 for Flask backend in local dev, otherwise relative path
-            const aiUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-                ? 'http://localhost:5001/api/search-by-image'
-                : '/api/search-by-image';
+            let requestBody = { image: base64Image };
 
-            const response = await fetch(aiUrl, {
+            // If we are on production and transformers.js is available, generate vector in browser
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                try {
+                    const model = await getExtractor();
+                    if (model && processor) {
+                        console.log("Generating vector in browser...");
+                        const inputs = await processor(base64Image);
+                        const { image_embeds } = await model(inputs);
+                        
+                        // Normalize vector (L2 norm)
+                        const data = image_embeds.data;
+                        let sumSq = 0;
+                        for (let i = 0; i < data.length; i++) sumSq += data[i] * data[i];
+                        const norm = Math.sqrt(sumSq);
+                        
+                        requestBody.vector = Array.from(data).map(x => x / norm);
+                        console.log("Vector generated (" + requestBody.vector.length + " dimensions), sending to backend...");
+                    } else {
+                        console.warn("AI Model not ready, sending raw image...");
+                    }
+                } catch (aiErr) {
+                    console.error("Browser AI failed, falling back to basic search:", aiErr);
+                }
+            }
+
+            const response = await fetch('/api/search-by-image', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: base64Image })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) throw new Error('Search failed');

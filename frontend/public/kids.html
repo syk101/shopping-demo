@@ -11,6 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles/shop.css">
     <link rel="stylesheet" href="styles/products.css">
+    <!-- AI Search Support -->
+    <script type="module">
+        import { pipeline, env, AutoProcessor, CLIPVisionModelWithProjection } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+        env.allowLocalModels = false;
+        window.AI_PIPELINE = pipeline;
+        window.AI_PROCESSOR = AutoProcessor;
+        window.AI_VISION_MODEL = CLIPVisionModelWithProjection;
+        window.aiReady = true;
+        console.log("AI Search Engine loaded.");
+    </script>
     <style>
         .category-section {
             margin-bottom: 4rem;
