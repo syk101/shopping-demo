@@ -108,9 +108,14 @@ function renderGrid(gridId, products) {
                     <i class="far fa-heart"></i>
                 </button>
                 <img src="${product.image}" loading="lazy" alt="${product.name}">
-                <button class="quick-add-btn" onclick="addToCart(${product.id}, event)">
-                    Quick Add <i class="fas fa-plus" style="margin-left: 5px; font-size: 0.8rem;"></i>
-                </button>
+                <div class="card-actions-overlay">
+                    <button class="quick-add-btn" onclick="addToCart(${product.id}, event)">
+                        Quick Add <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="tryon-btn-category" onclick="openTryOn(${product.id}, event)">
+                        <i class="fas fa-magic"></i> Try On
+                    </button>
+                </div>
             </div>
             <div class="modern-card-info">
                 <h3 class="modern-card-title">${product.name}</h3>
@@ -125,45 +130,17 @@ function renderGrid(gridId, products) {
     }).join('');
 }
 
+// Remove old addToCart as it's handled by cart-system.js
+window.openTryOn = function(productId, event) {
+    if (event) event.stopPropagation();
+    if (window.tryOnSystem) window.tryOnSystem.toggleModal(true, productId);
+};
+
 /**
  * INTERACTIVE FEATURES
  */
 
 // Add to Cart Logic
-window.addToCart = function (productId, event) {
-    if (event) event.stopPropagation();
-
-    const btn = event.currentTarget;
-    if (btn.disabled) return;
-
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
-    btn.disabled = true;
-
-    // Simulate API call
-    setTimeout(() => {
-        showNotification('Product added to bag successfully!', 'success');
-
-        btn.innerHTML = 'Added <i class="fas fa-check"></i>';
-        btn.style.background = '#111';
-        btn.style.color = '#fff';
-
-        // Update cart count UI (mock)
-        const cartCounts = document.querySelectorAll('.cart-count');
-        cartCounts.forEach(el => {
-            el.textContent = parseInt(el.textContent) + 1;
-            el.style.animation = 'pulse 0.3s ease';
-            setTimeout(() => el.style.animation = '', 300);
-        });
-
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.disabled = false;
-            btn.style.background = '';
-            btn.style.color = '';
-        }, 3000);
-    }, 800);
-};
 
 // Wishlist Logic
 window.toggleWishlist = function (productId, event) {

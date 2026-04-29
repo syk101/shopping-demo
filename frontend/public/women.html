@@ -104,10 +104,10 @@
 </head>
 
 <body>
-    <nav class="main-nav" style="background: rgba(255, 255, 255, 0.98); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <nav class="main-nav">
         <div class="nav-container">
-            <a href="shop.html" class="logo" style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; text-decoration: none; color: inherit;">
-                <i class="fas fa-store" style="font-size: 1.2rem; margin-right: 5px;"></i>
+            <a href="shop.html" class="logo">
+                <i class="fas fa-store"></i>
                 <span>Weary</span>
             </a>
             <div class="nav-links">
@@ -118,14 +118,13 @@
                 <button id="camera-search-btn" class="camera-btn" title="Search by Image">
                     <i class="fas fa-camera"></i>
                 </button>
-            </div>
-            <div class="nav-actions" style="display: flex; gap: 1rem; align-items: center; color: #1a1a1a;">
-                <i class="fas fa-search" style="cursor: pointer;"></i>
-                <i class="far fa-heart" style="cursor: pointer;"></i>
-                <div style="position: relative; cursor: pointer;">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span class="cart-count">0</span>
+                <div class="cart-nav" id="cart-toggle">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
                 </div>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
             </div>
         </div>
     </nav>
@@ -187,8 +186,43 @@
         </div>
     </footer>
 
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Shopping Cart</h3>
+            <button id="close-cart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items-list" id="cart-items-list"></div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <div class="summary-line"><span>Subtotal</span> <span id="cart-subtotal">$0.00</span></div>
+                <div class="summary-line"><span>Delivery</span> <span id="cart-delivery">$10.00</span></div>
+                <div class="summary-line total"><span>Grand Total</span> <span id="cart-total">$0.00</span></div>
+            </div>
+            <button class="btn btn-primary checkout-btn" id="checkout-btn">PROCEED TO CHECKOUT</button>
+        </div>
+    </div>
+
+    <!-- AI Try-On Modal -->
+    <div class="modal-overlay" id="tryon-modal">
+        <div class="modal-content tryon-content">
+            <div class="modal-header"><h3>AI Virtual Try-On</h3><button id="close-tryon"><i class="fas fa-times"></i></button></div>
+            <div class="tryon-body">
+                <div class="upload-section">
+                    <input type="file" id="avatar-upload" accept="image/*" hidden>
+                    <label for="avatar-upload" class="upload-label"><i class="fas fa-cloud-upload-alt"></i><span>Select Profile Photo</span></label>
+                </div>
+                <div id="tryon-preview" class="tryon-preview"></div>
+                <button id="start-tryon" class="btn btn-secondary">GENERATE AI PREVIEW</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/config.js"></script>
     <script src="js/camera-search.js"></script>
+    <script src="js/cart-system.js"></script>
+    <script src="js/tryon-system.js"></script>
     <script src="js/category.js"></script>
 </body>
 

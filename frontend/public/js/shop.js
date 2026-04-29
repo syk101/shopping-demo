@@ -84,9 +84,14 @@ function renderProductGrid(gridId, products) {
                     ${starsHtml}
                     <span>(${reviews})</span>
                 </div>
-                <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">
-                    ADD TO CART
-                </button>
+                <div class="tryon-actions">
+                    <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">
+                        ADD TO CART
+                    </button>
+                    <button class="btn-tryon" onclick="openTryOn(${product.id})">
+                        <i class="fas fa-magic"></i> TRY ON
+                    </button>
+                </div>
             </div>
         </div>
     `}).join('');
@@ -261,28 +266,6 @@ function viewProducts(collection, category) {
     }, 500);
 }
 
-// Add to cart function
-window.addToCart = function(productId) {
-    const button = event.target;
-    const originalText = button.textContent;
-
-    // Show loading state
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
-    button.disabled = true;
-
-    // Simulate API call
-    setTimeout(() => {
-        showNotification('Product added to cart successfully!', 'success');
-        button.textContent = originalText;
-        button.disabled = false;
-
-        // Add animation effect
-        button.style.animation = 'pulse 0.3s ease';
-        setTimeout(() => {
-            button.style.animation = '';
-        }, 300);
-    }, 1000);
-}
 
 // Set up product interactions
 function setupProductInteractions() {

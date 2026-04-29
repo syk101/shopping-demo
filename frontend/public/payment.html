@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | Premium Fashion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/shop.css">
+    <style>
+        .payment-container { height: 100vh; display: flex; align-items: center; justify-content: center; background: #f1f5f9; }
+        .payment-card { background: white; padding: 4rem; border-radius: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: center; max-width: 500px; width: 90%; }
+        .loader { width: 60px; height: 60px; border: 5px solid #f3f3f3; border-top: 5px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .success-icon { font-size: 5rem; color: #10b981; margin-bottom: 2rem; display: none; }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-card" id="status-card">
+            <h2 id="status-title">Processing Payment...</h2>
+            <p id="status-desc">Please do not refresh the page or click back.</p>
+            <div class="loader" id="loader"></div>
+            <div class="success-icon" id="success-icon"><i class="fas fa-check-circle"></i></div>
+            <div id="txn-details" style="display:none; margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 1rem;">
+                <p>Transaction ID: <strong id="txn-id"></strong></p>
+                <p>Amount Paid: <strong id="paid-amount"></strong></p>
+            </div>
+            <button id="home-btn" class="btn btn-primary" style="display:none; width: 100%; margin-top: 2rem;" onclick="window.location.href='shop.html'">
+                BACK TO HOME
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order_id');
+        const amount = urlParams.get('amount');
+        const method = urlParams.get('method');
+
+        async function processPayment() {
+            // Simulate network delay
+            await new Promise(r => setTimeout(r, 3000));
+
+            try {
+                const res = await fetch('/api/payment', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        order_id: parseInt(orderId),
+                        amount: parseFloat(amount),
+                        method: method
+                    })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    document.getElementById('status-title').textContent = 'Payment Successful!';
+                    document.getElementById('status-desc').textContent = 'Your order has been placed successfully.';
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('success-icon').style.display = 'block';
+                    document.getElementById('txn-id').textContent = data.transaction_id;
+                    document.getElementById('paid-amount').textContent = `$${amount}`;
+                    document.getElementById('txn-details').style.display = 'block';
+                    document.getElementById('home-btn').style.display = 'block';
+                }
+            } catch (err) {
+                document.getElementById('status-title').textContent = 'Payment Failed';
+                document.getElementById('status-desc').textContent = 'There was an error processing your payment.';
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        processPayment();
+    </script>
+</body>
+</html>

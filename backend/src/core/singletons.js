@@ -1,5 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fetch = require('node-fetch');
+const Jimp = require('jimp');
 
 class Database {
     constructor() {
@@ -19,8 +21,20 @@ class AIService {
     constructor() {
         if (AIService.instance) return AIService.instance;
         this.apiKey = process.env.HF_API_KEY;
-        this.model = "sentence-transformers/clip-ViT-B-32";
+        this.clipModel = "openai/clip-vit-base-patch32";
+        this.segModel = "CIDAS/clipseg-rd64-refined";
         AIService.instance = this;
+    }
+
+    async fetchHF(model, buffer, params = {}) {
+        const url = `https://api-inference.huggingface.co/models/${model}`;
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${this.apiKey}` },
+            body: buffer
+        });
+        if (!res.ok) throw new Error(`HF API Error: ${res.statusText}`);
+        return await res.json();
     }
 }
 

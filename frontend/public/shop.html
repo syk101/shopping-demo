@@ -35,6 +35,10 @@
                 <button id="camera-search-btn" class="camera-btn" title="Search by Image">
                     <i class="fas fa-camera"></i>
                 </button>
+                <div class="cart-nav" id="cart-toggle">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </div>
             </div>
             <div class="mobile-menu-btn">
                 <i class="fas fa-bars"></i>
@@ -341,11 +345,57 @@
 
     </footer>
 
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Shopping Cart</h3>
+            <button id="close-cart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items-list" id="cart-items-list">
+            <!-- Dynamic items -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <div class="summary-line"><span>Subtotal</span> <span id="cart-subtotal">$0.00</span></div>
+                <div class="summary-line"><span>Delivery</span> <span id="cart-delivery">$10.00</span></div>
+                <div class="summary-line total"><span>Grand Total</span> <span id="cart-total">$0.00</span></div>
+            </div>
+            <button class="btn btn-primary checkout-btn" id="checkout-btn">PROCEED TO CHECKOUT</button>
+        </div>
+    </div>
+
+    <!-- AI Try-On Modal -->
+    <div class="modal-overlay" id="tryon-modal">
+        <div class="modal-content tryon-content">
+            <div class="modal-header">
+                <h3>AI Virtual Try-On</h3>
+                <button id="close-tryon"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="tryon-body">
+                <div class="upload-section">
+                    <p>Upload your photo to see how it looks!</p>
+                    <input type="file" id="avatar-upload" accept="image/*" hidden>
+                    <label for="avatar-upload" class="upload-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Select Profile Photo</span>
+                    </label>
+                </div>
+                <div id="tryon-preview" class="tryon-preview">
+                    <!-- Image preview -->
+                </div>
+                <button id="start-tryon" class="btn btn-secondary">GENERATE AI PREVIEW</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Auth Script -->
     <script src="js/config.js?v=2"></script>
     <script src="js/auth.js?v=2"></script>
     <script src="js/camera-search.js?v=2"></script>
     <script src="js/shop.js?v=2"></script>
+    <script src="js/cart-system.js?v=2"></script>
+    <script src="js/tryon-system.js?v=2"></script>
 </body>
 
 </html>

@@ -29,13 +29,19 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_name TEXT NOT NULL,
     phone TEXT,
     address TEXT,
-    product_category TEXT,
-    product_id INTEGER,
-    quantity INTEGER NOT NULL,
     total_price REAL NOT NULL,
     status TEXT DEFAULT 'pending',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER,
+    product_id INTEGER,
+    quantity INTEGER NOT NULL,
+    price REAL NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
@@ -108,4 +114,41 @@ CREATE TABLE IF NOT EXISTS kid_casual (
     stock_quantity INTEGER DEFAULT 0,
     image_data BLOB,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cart (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    session_id TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id INTEGER,
+    amount REAL NOT NULL,
+    method TEXT NOT NULL,
+    status TEXT DEFAULT 'pending',
+    transaction_id TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS user_avatar (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_image_url TEXT,
+    processed_avatar_url TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS tryon_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    avatar_id INTEGER,
+    product_id INTEGER,
+    result_image_url TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (avatar_id) REFERENCES user_avatar(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );

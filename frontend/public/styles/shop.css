@@ -1210,3 +1210,267 @@ body {
     color: var(--text-light) !important;
     opacity: 0.7;
 }
+
+/* Cart Navigation Badge */
+.cart-nav {
+    position: relative;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.cart-nav:hover {
+    color: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: var(--danger-color);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Cart Sidebar */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: white;
+    z-index: 10001;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.active {
+    right: 0;
+}
+
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.cart-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cart-header {
+    padding: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-items-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+}
+
+.cart-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.cart-item-img img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-info h4 {
+    margin-bottom: 0.25rem;
+}
+
+.cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.cart-item-qty button {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: white;
+    cursor: pointer;
+}
+
+.remove-item {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--danger-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.cart-footer {
+    padding: 2rem;
+    background: var(--light-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.cart-summary {
+    margin-bottom: 1.5rem;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.summary-line.total {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-dark);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px dashed var(--border-color);
+}
+
+.checkout-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, var(--dark-bg), var(--secondary-color));
+}
+
+/* AI Try-On Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 10002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tryon-content {
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: var(--transition);
+}
+
+.modal-overlay.active .tryon-content {
+    transform: translateY(0);
+}
+
+.tryon-body {
+    padding: 2.5rem;
+    text-align: center;
+}
+
+.upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem;
+    border: 2px dashed var(--secondary-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    background: rgba(139, 92, 246, 0.05);
+    transition: var(--transition);
+    margin-bottom: 2rem;
+}
+
+.upload-label:hover {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.upload-label i {
+    font-size: 3rem;
+    color: var(--secondary-color);
+}
+
+.tryon-preview {
+    margin-bottom: 2rem;
+}
+
+.tryon-preview img {
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Try-On Button in Product Card */
+.tryon-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-tryon {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (max-width: 480px) {
+    .cart-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+}
