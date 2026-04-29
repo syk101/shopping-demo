@@ -120,7 +120,7 @@ class TryOnSystem {
             window.showNotification('Camera access denied', 'error');
         }
     }
-}
+
     downloadResult(url) {
         const link = document.createElement('a');
         link.href = url;
