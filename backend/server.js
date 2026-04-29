@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fetch = require('node-fetch');
-const sharp = require('sharp');
+const Jimp = require('jimp');
 require('dotenv').config();
 
 const app = express();
@@ -17,10 +17,11 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 async function optimizeImage(base64Data) {
     try {
         const buffer = Buffer.from(base64Data.split(',')[1] || base64Data, 'base64');
-        const optimized = await sharp(buffer)
-            .resize(800, 800, { fit: 'inside', withoutEnlargement: true })
-            .jpeg({ quality: 80 })
-            .toBuffer();
+        const image = await Jimp.read(buffer);
+        const optimized = await image
+            .scaleToFit(800, 800)
+            .quality(80)
+            .getBufferAsync(Jimp.MIME_JPEG);
         return optimized;
     } catch (err) {
         console.error("Image optimization error:", err);
