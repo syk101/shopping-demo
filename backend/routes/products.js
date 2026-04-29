@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 
@@ -6,7 +6,9 @@ const Product = require('../models/Product');
 router.get('/', async (req, res) => {
     try {
         const products = await Product.getAll();
-        res.json(products);
+        // Remove embeddings from the response to save bandwidth
+        const safeProducts = products.map(({ embedding, ...rest }) => rest);
+        res.json(safeProducts);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -16,7 +18,9 @@ router.get('/', async (req, res) => {
 router.get('/:category', async (req, res) => {
     try {
         const products = await Product.getAll();
-        const filtered = products.filter(p => p.category === req.params.category);
+        const filtered = products
+            .filter(p => p.category === req.params.category)
+            .map(({ embedding, ...rest }) => rest);
         res.json(filtered);
     } catch (error) {
         res.status(500).json({ message: error.message });
