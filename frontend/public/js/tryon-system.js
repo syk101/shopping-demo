@@ -50,7 +50,7 @@ class TryOnSystem {
         }
 
         const container = this.previewContainer;
-        container.innerHTML += `<div class="ar-processing"><div class="ar-scan-line"></div><i class="fas fa-microchip fa-spin fa-3x mb-3"></i><h3>AI MAPPING BODY...</h3></div>`;
+        container.innerHTML += `<div class="ar-processing"><div class="ar-scan-line"></div><i class="fas fa-microchip fa-spin fa-3x mb-3"></i><h3>AI MAPPING BODY...</h3><p>Fitting Default Formal Suit Demo</p></div>`;
 
         try {
             // 1. Get Product Info

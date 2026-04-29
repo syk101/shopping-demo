@@ -45,14 +45,9 @@ class AIService {
             // 1. Stylization: "Snapchat Filter" Look
             avatar.posterize(8).contrast(0.15).brightness(0.05);
 
-            // 2. Load Product
-            const productPath = path.isAbsolute(productImageUrl) ? productImageUrl : path.join(__dirname, '../../../frontend/public', productImageUrl);
-            let product;
-            try {
-                product = await Jimp.read(productPath);
-            } catch (e) {
-                product = await Jimp.read(productImageUrl);
-            }
+            // 2. Load Default Formal Suit (Demo Experience)
+            const defaultSuitPath = path.join(__dirname, '../../../frontend/public/assets/ai/formal-suit.png');
+            const product = await Jimp.read(defaultSuitPath);
 
             // 3. Precision Alignment using MediaPipe Anchors
             const avatarWidth = avatar.getWidth();
@@ -68,14 +63,14 @@ class AIService {
                 y = (anchors.center.y * avatarHeight) - (product.getHeight() / 2);
             } else {
                 // Fallback to center-torso
-                product.resize(avatarWidth * 0.65, Jimp.AUTO);
+                product.resize(avatarWidth * 0.7, Jimp.AUTO);
                 x = (avatarWidth - product.getWidth()) / 2;
-                y = avatarHeight * 0.3;
+                y = avatarHeight * 0.25; // Slightly higher for formal suit
             }
 
             // 4. Composition with AR depth
-            const shadow = product.clone().brightness(-1).blur(3).opacity(0.2);
-            avatar.composite(shadow, x + 3, y + 3);
+            const shadow = product.clone().brightness(-1).blur(5).opacity(0.15);
+            avatar.composite(shadow, x + 4, y + 4);
             
             avatar.composite(product, x, y, {
                 mode: Jimp.BLEND_SOURCE_OVER,
