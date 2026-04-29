@@ -147,7 +147,7 @@ function filterProducts(searchTerm) {
             <td>${product.id}</td>
             <td>${product.name}</td>
             <td>${product.description || 'No description'}</td>
-            <td><img src="${imageUrl}" alt="${product.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
+            <td><img src="${imageUrl}" alt="${product.name}" loading="lazy" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
             <td>${product.table_name || 'N/A'}</td>
             <td>$${parseFloat(product.price).toFixed(2)}</td>
             <td>${product.stock_quantity || 0}</td>
@@ -783,7 +783,7 @@ function renderEmployeesTable() {
         return `
             <tr>
                 <td>${emp.id}</td>
-                <td><img src="${imageUrl}" alt="${emp.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0;"></td>
+                <td><img src="${imageUrl}" alt="${emp.name}" loading="lazy" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0;"></td>
                 <td style="font-weight: 500;">${emp.name}</td>
                 <td>$${parseFloat(emp.salary).toFixed(2)}</td>
                 <td>${emp.working_hours}h</td>

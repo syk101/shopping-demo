@@ -1,12 +1,17 @@
 services:
   - type: web
-    name: shopping-management-system
+    name: shopmanager
     env: node
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: npm install && npm prune --production
+    startCommand: node backend/server.js
     envVars:
       - key: NODE_VERSION
         value: 18.16.0
       - key: PORT
         value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: HF_API_KEY
+        sync: false # User must set this manually in Render dashboard
+    healthCheckPath: /test

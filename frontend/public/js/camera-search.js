@@ -235,7 +235,7 @@ function initCameraSearch() {
             const cartFuncName = window.addToCart ? 'addToCart' : (window.cartAction ? 'cartAction' : 'console.log');
             
             resultItem.innerHTML = `
-                <img src="${imageUrl}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">
+                <img src="${imageUrl}" loading="lazy" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;">
                 <h5 style="font-size: 0.9rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.name}</h5>
                 <div style="font-weight: 700; color: #8b5cf6;">$${parseFloat(product.price).toFixed(2)}</div>
                 <button class="btn btn-primary btn-small" style="width: 100%; margin-top: 8px; font-size: 0.7rem; padding: 5px;" onclick="${cartFuncName}(${product.id}, event)">
