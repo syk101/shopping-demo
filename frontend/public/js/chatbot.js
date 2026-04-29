@@ -24,9 +24,9 @@ class ShopChatbot {
             <div id="chat-window" class="chat-window">
                 <div class="chat-header">
                     <div class="header-info">
-                        <div class="bot-avatar">SM</div>
+                        <div class="bot-avatar">SH</div>
                         <div>
-                            <h4>AI Salesman</h4>
+                            <h4>Shoppo</h4>
                             <span>Online | Store Expert</span>
                         </div>
                     </div>
@@ -34,7 +34,7 @@ class ShopChatbot {
                 </div>
                 <div id="chat-messages" class="chat-messages">
                     <div class="message bot">
-                        Hello! I'm your AI Salesman. Looking for a new look today?
+                        Hello! I'm Shoppo, your AI Salesman. Looking for a new look today?
                     </div>
                 </div>
                 <div class="chat-input-area">
