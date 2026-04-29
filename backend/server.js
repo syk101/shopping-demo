@@ -5,6 +5,7 @@ const { db, ai } = require('./src/core/singletons');
 const VisionAdapter = require('./src/adapters/visionAdapter');
 const { SearchContext, TextSearchStrategy, AISearchStrategy } = require('./src/strategies/searchStrategies');
 const { StockSubject, stockNotifier } = require('./src/core/observer');
+const chatService = require('./src/services/ChatService');
 
 const app = express();
 app.use(cors());
@@ -48,6 +49,23 @@ app.post('/api/ai/avatar', async (req, res) => {
         res.json({ success: true, avatar_id: result.id });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// AI Chat Endpoint
+app.post('/api/chat', async (req, res) => {
+    const { message, history } = req.body;
+    try {
+        // 1. Get current inventory for context
+        const products = await db.query("SELECT id, name, category, price, stock, description FROM products");
+        
+        // 2. Get AI Response
+        const reply = await chatService.getSalesmanResponse(message, products, history || []);
+        
+        res.json({ success: true, reply });
+    } catch (err) {
+        console.error("Chat error:", err);
+        res.status(500).json({ error: "Salesman is currently busy. Try again soon!" });
     }
 });
 
