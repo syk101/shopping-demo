@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="styles/products.css">
     <link rel="stylesheet" href="styles/chatbot.css">
     <link rel="stylesheet" href="styles/shop.css">
+    <link rel="stylesheet" href="styles/tryon.css">
     <!-- AI Search Support -->
     <script type="module">
-        import { pipeline, env, AutoProcessor, CLIPVisionModelWithProjection } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+        import { pipeline, env, AutoProcessor, CLIPVisionModelWithProjection } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.18.0';
         env.allowLocalModels = false;
         window.AI_PIPELINE = pipeline;
         window.AI_PROCESSOR = AutoProcessor;
@@ -369,37 +370,63 @@
 
     <!-- AI Try-On Modal -->
     <div class="modal-overlay" id="tryon-modal">
-        <div class="modal-content tryon-content">
-            <div class="modal-header">
-                <h3>AI Virtual Try-On</h3>
-                <button id="close-tryon"><i class="fas fa-times"></i></button>
+        <div class="tryon-content">
+            <div class="tryon-header">
+                <div>
+                    <h2>VIRTUAL STUDIO <span class="studio-badge">AI POWERED</span></h2>
+                </div>
+                <button id="close-tryon" class="close-modal">&times;</button>
             </div>
+            
             <div class="tryon-body">
-                <div class="upload-section">
-                    <p>Upload or capture your photo to see how it looks!</p>
-                    <input type="file" id="avatar-upload" accept="image/*" hidden>
-                    <div class="tryon-actions">
-                        <label for="avatar-upload" class="upload-label"><i class="fas fa-image"></i><span>Upload Photo</span></label>
-                        <button id="open-camera" class="btn btn-secondary upload-label"><i class="fas fa-camera"></i><span>Open Camera</span></button>
+                <div id="tryon-preview" class="tryon-preview">
+                    <div class="studio-placeholder">
+                        <i class="fas fa-user-tie fa-4x" style="opacity: 0.2; margin-bottom: 20px;"></i>
+                        <p>Awaiting Visual Input...</p>
                     </div>
                 </div>
-                <div id="tryon-preview" class="tryon-preview">
-                    <!-- Image preview -->
+
+                <div class="studio-sidebar">
+                    <div class="glass-panel">
+                        <h4>1. Visual Input</h4>
+                        <div class="upload-options-v2">
+                            <label for="avatar-upload" class="opt-btn">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>UPLOAD</span>
+                            </label>
+                            <button id="open-camera" class="opt-btn">
+                                <i class="fas fa-camera"></i>
+                                <span>CAMERA</span>
+                            </button>
+                        </div>
+                        <input type="file" id="avatar-upload" accept="image/*" hidden>
+                    </div>
+
+                    <div class="glass-panel">
+                        <h4>2. AI Transformation</h4>
+                        <button id="start-tryon" class="btn btn-primary" style="width: 100%; border-radius: 12px; height: 60px; font-weight: 800;">
+                            <i class="fas fa-sparkles"></i> GENERATE PREVIEW
+                        </button>
+                    </div>
+
+                    <div class="glass-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; opacity: 0.5;">
+                        <i class="fas fa-info-circle" style="margin-bottom: 10px;"></i>
+                        <p style="font-size: 0.7rem; line-height: 1.4;">Our Generative Agent analyzes fabric draping and body alignment for a realistic fitting experience.</p>
+                    </div>
                 </div>
-                <button id="start-tryon" class="btn btn-secondary">GENERATE AI PREVIEW</button>
             </div>
         </div>
     </div>
 
     <!-- Auth Script -->
-    <script src="js/config.js?v=2"></script>
-    <script src="js/auth.js?v=2"></script>
-    <script src="js/camera-search.js?v=2"></script>
-    <script src="js/shop.js?v=2"></script>
-    <script src="js/cart-system.js?v=2"></script>
-    <script src="js/tryon-ar.js?v=2"></script>
-    <script src="js/tryon-system.js?v=2"></script>
-    <script src="js/chatbot.js?v=2"></script>
+    <script src="js/config.js?v=9"></script>
+    <script src="js/auth.js?v=9"></script>
+    <script src="js/camera-search.js?v=9"></script>
+    <script src="js/shop.js?v=9"></script>
+    <script src="js/cart-system.js?v=9"></script>
+    <script src="js/tryon-ar.js?v=9"></script>
+    <script src="js/tryon-system.js?v=9"></script>
+    <script src="js/chatbot.js?v=9"></script>
 </body>
 
 </html>

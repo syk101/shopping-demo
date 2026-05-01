@@ -7,8 +7,7 @@ function initSocialLogins() {
         ? CONFIG.GOOGLE_CLIENT_ID
         : '224848454993-10s7j2e07cjohqj0222tt8jgj61sg22s.apps.googleusercontent.com';
 
-    console.log('[DEBUG] Current Origin:', window.location.origin);
-    console.log('[DEBUG] Using Client ID:', GOOGLE_CLIENT_ID.substring(0, 10) + '...');
+    // Cleaned up logs for production
 
     if (typeof google !== 'undefined') {
 

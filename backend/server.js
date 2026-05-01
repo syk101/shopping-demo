@@ -55,13 +55,28 @@ app.post('/api/ai/avatar', async (req, res) => {
 
 // AI Chat Endpoint
 app.post('/api/chat', async (req, res) => {
-    const { message, history } = req.body;
+    const { message, history, image } = req.body;
     try {
         // 1. Get current inventory for context
-        const products = await db.query("SELECT id, name, category, price, stock, description FROM products");
+        const products = await db.query("SELECT id, name, category, price, stock, description, image FROM products");
         
-        // 2. Get AI Response
-        const reply = await chatService.getSalesmanResponse(message, products, history || []);
+        let contextMessage = message;
+        
+        // 2. Handle Image/Visual Search if provided
+        if (image) {
+            try {
+                const results = await vision.search(image, products);
+                if (results && results.length > 0) {
+                    const topResults = results.slice(0, 3).map(r => `[PRODUCT:${r.id}]`).join(', ');
+                    contextMessage = `User uploaded an image. Visual search found these similar products: ${topResults}. User says: ${message || "What do you think of these?"}`;
+                }
+            } catch (vErr) {
+                console.error("Visual Search Error in Chat:", vErr);
+            }
+        }
+
+        // 3. Get AI Response (now with multimodal support)
+        const reply = await chatService.getSalesmanResponse(contextMessage, products, history || [], image);
         
         res.json({ success: true, reply });
     } catch (err) {

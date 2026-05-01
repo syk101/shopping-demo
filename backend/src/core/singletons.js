@@ -13,100 +13,73 @@ class Database {
         return new Promise((res, rej) => this.db.all(sql, params, (err, rows) => err ? rej(err) : res(rows)));
     }
     run(sql, params = []) {
-        return new Promise((res, rej) => this.db.run(sql, params, function(err) { err ? rej(err) : res({ id: this.lastID, changes: this.changes }); }));
+        return new Promise((res, rej) => this.db.run(sql, params, function (err) { err ? rej(err) : res({ id: this.lastID, changes: this.changes }); }));
     }
 }
+
+const geminiAgent = require('../services/GeminiTryOnAgent');
+const fs = require('fs');
 
 class AIService {
     constructor() {
         if (AIService.instance) return AIService.instance;
-        this.apiKey = process.env.HF_API_KEY;
-        this.clipModel = "openai/clip-vit-base-patch32";
-        this.segModel = "CIDAS/clipseg-rd64-refined";
+        this.apiKey = process.env.GEMINI_API_KEY;
         AIService.instance = this;
-    }
-
-    async fetchHF(model, buffer, params = {}) {
-        const url = `https://api-inference.huggingface.co/models/${model}`;
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${this.apiKey}` },
-            body: buffer
-        });
-        if (!res.ok) throw new Error(`HF API Error: ${res.statusText}`);
-        return await res.json();
     }
 
     async tryOn(avatarBase64, productImageUrl, anchors = null) {
         try {
-            // 1. Prepare Images
-            const avatarBuffer = Buffer.from(avatarBase64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-            const avatar = await Jimp.read(avatarBuffer);
+            console.log("[AIService] AntiGravity_Generative_Agent Initiating Synthesis...");
+
+            // 1. Generate High-Fidelity Prompt via Gemini 3
+            let resultAgent = await geminiAgent.analyzeAndGenerate(avatarBase64, productImageUrl, anchors);
+            let prompt = resultAgent.instructions.generative_prompt || "A professional portrait of a person wearing premium clothing";
             
-            const productPath = path.isAbsolute(productImageUrl) ? productImageUrl : path.join(__dirname, '../../../frontend/public', productImageUrl);
-            let product;
-            try {
-                product = await Jimp.read(productPath);
-            } catch (e) {
-                product = await Jimp.read(productImageUrl);
+            console.log("[AIService] Generative AI Prompt Crafted:", prompt);
+
+            // 2. Synthesize New Image via Pollinations (Flux/Stable Diffusion)
+            const seed = Math.floor(Math.random() * 1000000);
+            const encodedPrompt = encodeURIComponent(prompt);
+            const genUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
+            
+            let response;
+            let retryCount = 0;
+            const maxRetries = 2;
+            
+            while (retryCount <= maxRetries) {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
+                    
+                    response = await fetch(genUrl, { signal: controller.signal });
+                    clearTimeout(timeout);
+                    
+                    if (response.ok) break;
+                    throw new Error(`Pollinations returned ${response.status}`);
+                } catch (pErr) {
+                    retryCount++;
+                    console.warn(`[AIService] Synthesis attempt ${retryCount} failed:`, pErr.message);
+                    if (retryCount > maxRetries) throw pErr;
+                    await new Promise(r => setTimeout(r, 2000)); // Wait before retry
+                }
             }
 
-            // 2. High Realism Analysis (Gemini Guided)
-            // In a production environment with a Generative Image API, we would send the prompt here.
-            // For this lightweight version, we use the prompt to guide our Advanced Jimp Fusion.
-            
-            const avatarWidth = avatar.getWidth();
-            const avatarHeight = avatar.getHeight();
-            
-            // Advanced Alignment Logic
-            let x, y, pWidth, pHeight;
-            if (anchors && anchors.center) {
-                pWidth = anchors.width * avatarWidth;
-                product.resize(pWidth, Jimp.AUTO);
-                x = (anchors.center.x * avatarWidth) - (product.getWidth() / 2);
-                y = (anchors.center.y * avatarHeight) - (product.getHeight() / 2);
-            } else {
-                product.resize(avatarWidth * 0.75, Jimp.AUTO);
-                x = (avatarWidth - product.getWidth()) / 2;
-                y = avatarHeight * 0.28;
-            }
+            const buffer = await response.buffer();
+            const resultBase64 = `data:image/jpeg;base64,${buffer.toString('base64')}`;
 
-            // 3. Fusion: Photorealistic Shadows & Lighting
-            // Extract dominant lighting from avatar to match on product
-            const shadow = product.clone().brightness(-1).blur(8).opacity(0.25);
-            const highlight = product.clone().brightness(0.1).opacity(0.1);
-            
-            // Apply subtle distortions for "Folds" effect
-            // (Simulated via slight perspective/scale variance)
-            
-            // Layering
-            avatar.composite(shadow, x + 5, y + 8); // Deep shadow
-            
-            // Realistic Blending
-            avatar.composite(product, x, y, {
-                mode: Jimp.BLEND_SOURCE_OVER,
-                opacitySource: 1.0
-            });
-
-            avatar.composite(highlight, x - 2, y - 2); // Soft rim light
-
-            // 4. Identity Preservation
-            // We use a high-quality JPEG output to preserve skin tone and details
-            const resultBase64 = await avatar.getBase64Async(Jimp.MIME_JPEG);
-            
-            return { 
+            return {
                 success: true,
                 image: resultBase64,
-                message: "High-resolution AI fusion complete"
+                message: "Generative AI Synthesis Complete"
             };
         } catch (err) {
-            console.error("Advanced AI Try-On failed:", err);
-            return { image: avatarBase64 };
+            console.error("[AIService] Generative Synthesis Error:", err);
+            return { success: false, error: err.message, image: avatarBase64 };
         }
     }
 }
 
-module.exports = { 
-    db: new Database(), 
-    ai: new AIService() 
+module.exports = {
+    db: new Database(),
+    ai: new AIService()
 };

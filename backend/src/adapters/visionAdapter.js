@@ -1,53 +1,74 @@
-const fetch = require('node-fetch');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 class VisionAdapter {
     constructor(config) {
         this.apiKey = config.apiKey;
-        this.apiUrl = `https://api-inference.huggingface.co/models/${config.model}`;
-    }
-
-    async getEmbedding(buffer) {
-        if (!this.apiKey || this.apiKey === 'undefined') {
-            console.warn("HF_API_KEY missing, using mock embedding.");
-            return new Array(512).fill(0).map(() => Math.random());
-        }
-        try {
-            const res = await fetch(this.apiUrl, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${this.apiKey}` },
-                body: buffer
-            });
-            if (!res.ok) throw new Error(`AI Fetch Failed: ${res.statusText}`);
-            const json = await res.json();
-            return Array.isArray(json[0]) ? json[0] : json;
-        } catch (err) {
-            console.error("AI Embedding failed, using fallback:", err);
-            return new Array(512).fill(0).map(() => Math.random());
-        }
+        this.genAI = new GoogleGenerativeAI(this.apiKey);
     }
 
     async search(imageBase64, products) {
-        const buffer = Buffer.from(imageBase64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-        const queryVector = await this.getEmbedding(buffer);
-        
-        return products.map(p => {
-            // If product has no vector, return 0 similarity
-            if (!p.vector) return { ...p, similarity: 0 };
+        try {
+            console.log("[VisionAdapter] Analyzing search image via Gemini...");
+            const model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
             
-            const pVector = typeof p.vector === 'string' ? JSON.parse(p.vector) : p.vector;
-            const sim = this.cosineSimilarity(queryVector, pVector);
-            return { ...p, similarity: sim };
-        }).sort((a, b) => b.similarity - a.similarity).slice(0, 10);
+            const imagePart = {
+                inlineData: {
+                    data: imageBase64.split(',')[1],
+                    mimeType: "image/jpeg"
+                }
+            };
+
+            const prompt = `
+                Analyze this product image. 
+                Identify the type of clothing, color, style, and key features.
+                Return a JSON object with:
+                {
+                    "tags": ["tag1", "tag2"],
+                    "description": "short description",
+                    "category": "men/women/kids"
+                }
+            `;
+
+            const result = await model.generateContent([prompt, imagePart]);
+            const response = await result.response;
+            const text = response.text();
+            
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            const analysis = jsonMatch ? JSON.parse(jsonMatch[0]) : { tags: [], description: text };
+
+            console.log("[VisionAdapter] AI Analysis:", analysis);
+
+            // Match against products using text similarity (since we don't have embeddings for all products yet)
+            const searchTerms = [...analysis.tags, analysis.description.toLowerCase()];
+            
+            return products.map(p => {
+                let score = 0;
+                const pName = p.name.toLowerCase();
+                const pDesc = (p.description || "").toLowerCase();
+                
+                searchTerms.forEach(term => {
+                    if (pName.includes(term)) score += 2;
+                    if (pDesc.includes(term)) score += 1;
+                });
+
+                return { ...p, similarity: score / 10 }; // Normalize score
+            }).sort((a, b) => b.similarity - a.similarity).slice(0, 10);
+
+        } catch (err) {
+            console.error("[VisionAdapter] Gemini Search Error:", err);
+            return products.slice(0, 10); // Fallback to first 10
+        }
     }
 
     cosineSimilarity(v1, v2) {
+        // Kept for backward compatibility if AISearchStrategy uses it
         let dot = 0, n1 = 0, n2 = 0;
         for (let i = 0; i < v1.length; i++) {
             dot += v1[i] * v2[i];
             n1 += v1[i] * v1[i];
             n2 += v2[i] * v2[i];
         }
-        return dot / (Math.sqrt(n1) * Math.sqrt(n2));
+        return dot / (Math.sqrt(n1) * Math.sqrt(n2)) || 0;
     }
 }
 
